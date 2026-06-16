@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RamzApp - مرحباً</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0d0d0d;
+            --accent: #ff0050;
+            --text: #fff;
+            --text3: #999;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: var(--bg);
+            font-family: 'Cairo', sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 28px;
+            color: var(--text);
+            overflow: hidden;
+            padding: 20px;
+            animation: fadeIn 0.6s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .logo {
+            font-size: 72px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff0050, #ff6b8a, #ff0050);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease infinite, pulse 2s ease-in-out infinite;
+            text-align: center;
+            line-height: 1.2;
+        }
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+        .subtitle {
+            color: var(--text3);
+            font-size: 16px;
+            max-width: 320px;
+            text-align: center;
+            line-height: 1.8;
+            margin-top: -12px;
+        }
+        .btn {
+            padding: 16px 56px;
+            border-radius: 30px;
+            border: none;
+            background: linear-gradient(135deg, #ff0050, #ff6b8a);
+            color: #fff;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+            letter-spacing: 1px;
+            box-shadow: 0 8px 25px rgba(255,0,80,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 14px 35px rgba(255,0,80,0.5);
+        }
+        .btn:active {
+            transform: scale(0.96);
+        }
+        .features {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 340px;
+        }
+        .feature-badge {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 13px;
+            color: #ddd;
+            backdrop-filter: blur(4px);
+            transition: background 0.2s;
+        }
+        .feature-badge:hover {
+            background: rgba(255,255,255,0.15);
+        }
+        .footer-note {
+            color: var(--text3);
+            font-size: 11px;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo">💬 RamzApp</div>
+    <div class="subtitle">محادثات آمنة وسريعة، مكالمات مباشرة، وقصص تختفي بعد 24 ساعة – كل ذلك في تطبيق واحد.</div>
+    <div class="features">
+        <span class="feature-badge">📱 مكالمات</span>
+        <span class="feature-badge">📷 قصص</span>
+        <span class="feature-badge">🔍 تعارف</span>
+        <span class="feature-badge">🔒 آمن</span>
+    </div>
+    <a href="login.html" class="btn">تسجيل الدخول</a>
+    <p class="footer-note">RamzApp v1.0 – جميع الحقوق محفوظة © 2026</p>
+
+    <script>
+        (function() {
+            const raw = localStorage.getItem('ramzapp_user');
+            if (raw) {
+                try {
+                    const user = JSON.parse(raw);
+                    if (user && user.id) {
+                        window.location.href = 'chats.html';
+                    }
+                } catch(e) {}
+            }
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>RamzApp - رابط مراسلة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0d0d0d;
+            --surface: #1a1a1a;
+            --surface2: #222;
+            --text: #fff;
+            --text3: #999;
+            --accent: #ff0050;
+            --border: #2c2c2c;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: var(--bg);
+            font-family: 'Cairo', sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            color: var(--text);
+            padding: 20px;
+        }
+        .logo {
+            font-size: 48px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff0050, #ff6b8a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .card {
+            background: var(--surface);
+            border-radius: 20px;
+            padding: 24px;
+            width: 340px;
+            max-width: 90%;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+        }
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--surface2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: 800;
+            margin: 0 auto 12px;
+            border: 3px solid var(--accent);
+        }
+        .name {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .sub {
+            color: var(--text3);
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 25px;
+            border: none;
+            background: linear-gradient(135deg, #ff0050, #ff6b8a);
+            color: #fff;
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 8px;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255,0,80,0.3); }
+        .btn.secondary {
+            background: transparent;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+        }
+        .error {
+            color: #ff4444;
+            font-size: 13px;
+        }
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="logo">💬 Ramz-App</div>
+    <div class="card" id="card">
+        <div id="loading">
+            <span class="loading-spinner"></span> جاري التحقق من الرابط...
+        </div>
+        <div id="content" style="display:none;">
+            <div class="avatar" id="userAvatar">?</div>
+            <div class="name" id="userName"></div>
+            <div class="sub">يريد مراسلتك عبر RamzApp</div>
+            <button class="btn" id="openChatBtn">💬 فتح المحادثة</button>
+            <button class="btn secondary" id="loginFirstBtn" style="display:none;">🔐 تسجيل الدخول أولاً</button>
+            <p class="error" id="errorMsg" style="display:none;"></p>
+        </div>
+    </div>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+        const SUPABASE_URL = 'https://serlegwdzjulfcxabxzv.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_4_c97KxnG_7HTvfv-pKeNQ_FTlnK6Yx';
+        const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // قراءة معرف المستخدم من الرابط
+        const urlParams = new URLSearchParams(window.location.search);
+        const targetUserId = urlParams.get('id');
+
+        const loadingDiv = document.getElementById('loading');
+        const contentDiv = document.getElementById('content');
+        const errorMsg = document.getElementById('errorMsg');
+        const userAvatar = document.getElementById('userAvatar');
+        const userName = document.getElementById('userName');
+        const openChatBtn = document.getElementById('openChatBtn');
+        const loginFirstBtn = document.getElementById('loginFirstBtn');
+
+        // التحقق من وجود معرف
+        if (!targetUserId) {
+            loadingDiv.innerHTML = '<span style="color:#ff4444;">❌ رابط غير صالح</span>';
+            return;
+        }
+
+        try {
+            // جلب بيانات المستخدم المستهدف
+            const { data: targetUser, error } = await supabase
+                .from('users')
+                .select('name, avatar')
+                .eq('id', targetUserId)
+                .single();
+
+            if (error || !targetUser) {
+                loadingDiv.innerHTML = '<span style="color:#ff4444;">❌ هذا المستخدم غير موجود أو لم يعد متاحاً</span>';
+                return;
+            }
+
+            // عرض بيانات المستخدم
+            userAvatar.textContent = targetUser.avatar || '?';
+            userName.textContent = targetUser.name || 'مستخدم RamzApp';
+
+            loadingDiv.style.display = 'none';
+            contentDiv.style.display = 'block';
+
+            // التحقق من حالة تسجيل الدخول للمستخدم الحالي
+            const { data: { session } } = await supabase.auth.getSession();
+            const isLoggedIn = !!session?.user;
+
+            if (isLoggedIn) {
+                // مسجل الدخول – زر فتح المحادثة مباشرة
+                openChatBtn.style.display = 'block';
+                loginFirstBtn.style.display = 'none';
+
+                openChatBtn.addEventListener('click', () => {
+                    localStorage.setItem('currentChatId', targetUserId);
+                    window.location.href = 'chat.html';
+                });
+
+                // انتقال تلقائي بعد 2 ثانية
+                setTimeout(() => {
+                    localStorage.setItem('currentChatId', targetUserId);
+                    window.location.href = 'chat.html';
+                }, 2000);
+
+                // إضافة مؤشر الانتقال التلقائي
+                const autoHint = document.createElement('p');
+                autoHint.style.cssText = 'color: var(--text3); font-size: 12px; margin-top: 12px;';
+                autoHint.textContent = 'جاري فتح المحادثة تلقائياً...';
+                contentDiv.appendChild(autoHint);
+
+            } else {
+                // غير مسجل – زر تسجيل الدخول أولاً
+                openChatBtn.style.display = 'none';
+                loginFirstBtn.style.display = 'block';
+
+                loginFirstBtn.addEventListener('click', () => {
+                    // تخزين معرف المستخدم المستهدف لاستكماله بعد تسجيل الدخول
+                    localStorage.setItem('ramzapp_deep_link_target', targetUserId);
+                    window.location.href = 'login.html';
+                });
+
+                // إضافة تنبيه
+                const hint = document.createElement('p');
+                hint.style.cssText = 'color: var(--text3); font-size: 12px; margin-top: 12px;';
+                hint.textContent = 'يجب تسجيل الدخول أولاً لفتح المحادثة';
+                contentDiv.appendChild(hint);
+            }
+
+        } catch (err) {
+            console.error(err);
+            loadingDiv.innerHTML = '<span style="color:#ff4444;">❌ حدث خطأ أثناء التحقق من الرابط</span>';
+        }
+    </script>
+</body>
+</html>

@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>💬 Ramz-App | الدردشات</title>
+    <title>💬 RamzApp | الدردشات</title>
 
-    <!-- أيقونات -->
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" as="style"
-          onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"></noscript>
+    <!-- FontAwesome: تحميل مباشر ومضمون -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css">
+    <!-- رابط احتياطي إضافي -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" onerror="document.body.classList.add('no-fa')">
 
-    <!-- خط -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <style>
@@ -43,58 +44,72 @@
             --text3: #667781;
             --border: #e0e0e0;
             --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --online: #00a884;
+            --unread: #ff0050;
         }
+
+        /* نظام الأيقونات الاحتياطي */
+        body.no-fa .fa, body.no-fa .fas, body.no-fa .far, body.no-fa .fab {
+            font-family: 'Cairo', 'Segoe UI', 'Arial', sans-serif !important;
+            font-weight: normal !important; font-style: normal !important;
+            display: inline !important; letter-spacing: 0 !important;
+        }
+        body.no-fa .fa-cog::before{content:"⚙"} body.no-fa .fa-address-book::before{content:"📇"}
+        body.no-fa .fa-search::before{content:"🔍"} body.no-fa .fa-ellipsis-v::before{content:"⋮"}
+        body.no-fa .fa-arrow-right::before{content:"◀"} body.no-fa .fa-arrow-left::before{content:"▶"}
+        body.no-fa .fa-phone::before{content:"📞"} body.no-fa .fa-video::before{content:"📹"}
+        body.no-fa .fa-comment-dots::before{content:"💬"} body.no-fa .fa-sync-alt::before{content:"🔄"}
+        body.no-fa .fa-tools::before{content:"🛠"} body.no-fa .fa-paper-plane::before{content:"✉"}
+        body.no-fa .fa-microphone::before{content:"🎤"} body.no-fa .fa-paperclip::before{content:"📎"}
+        body.no-fa .fa-smile-wink::before{content:"😊"} body.no-fa .fa-smile::before{content:"😊"}
+        body.no-fa .fa-reply::before{content:"↩"} body.no-fa .fa-image::before{content:"🖼"}
+        body.no-fa .fa-file-alt::before{content:"📄"} body.no-fa .fa-file::before{content:"📄"}
+        body.no-fa .fa-address-card::before{content:"👤"} body.no-fa .fa-plus-circle::before{content:"⊕"}
+        body.no-fa .fa-plus::before{content:"+"} body.no-fa .fa-boxes::before{content:"📦"}
+        body.no-fa .fa-bullhorn::before{content:"📣"} body.no-fa .fa-chevron-left::before{content:"‹"}
+        body.no-fa .fa-moon::before{content:"🌙"} body.no-fa .fa-bell::before{content:"🔔"}
+        body.no-fa .fa-download::before{content:"⬇"} body.no-fa .fa-upload::before{content:"⬆"}
+        body.no-fa .fa-trash-alt::before{content:"🗑"} body.no-fa .fa-trash::before{content:"🗑"}
+        body.no-fa .fa-sign-out-alt::before{content:"🚪"} body.no-fa .fa-heart::before{content:"❤"}
+        body.no-fa .fa-check::before{content:"✓"} body.no-fa .fa-check-double::before{content:"✓✓"}
+        body.no-fa .fa-play::before{content:"▶"} body.no-fa .fa-pause::before{content:"⏸"}
+        body.no-fa .fa-phone-slash::before{content:"✕"} body.no-fa .fa-volume-up::before{content:"🔊"}
+        body.no-fa .fa-info-circle::before{content:"ℹ"} body.no-fa .fa-comments::before{content:"💬"}
+        body.no-fa .fa-archive::before{content:"📦"} body.no-fa .fa-star::before{content:"⭐"}
+        body.no-fa .fa-thumbtack::before{content:"📌"} body.no-fa .fa-users::before{content:"👥"}
+        body.no-fa .fa-photo-video::before{content:"🎞"} body.no-fa .fa-user::before{content:"👤"}
+        body.no-fa .fa-times::before{content:"✕"} body.no-fa .fa-close::before{content:"✕"}
+        body.no-fa .fa-circle::before{content:"●"} body.no-fa .fa-envelope::before{content:"✉"}
+        body.no-fa .fa-globe::before{content:"🌐"} body.no-fa .fa-lock::before{content:"🔒"}
+        body.no-fa .fa-shield-alt::before{content:"🛡"} body.no-fa .fa-edit::before{content:"✏"}
+        body.no-fa .fa-share::before{content:"↗"} body.no-fa .fa-link::before{content:"🔗"}
+        body.no-fa .fa-copy::before{content:"📋"} body.no-fa .fa-save::before{content:"💾"}
+        body.no-fa .fa-eye::before{content:"👁"} body.no-fa .fa-exclamation-triangle::before{content:"⚠"}
+        body.no-fa .fa-compass::before{content:"🧭"} body.no-fa .fa-folder-open::before{content:"📂"}
+        body.no-fa .fa-user-plus::before{content:"👤+"} body.no-fa .fa-user-slash::before{content:"🚫"}
+        body.no-fa .fa-ban::before{content:"🚫"} body.no-fa .fa-forward::before{content:"⏩"}
+        body.no-fa .fa-share-alt::before{content:"↗"} body.no-fa .fa-phone-alt::before{content:"📞"}
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
         body {
-            background: var(--bg);
-            font-family: 'Cairo', 'Segoe UI', 'Arial', sans-serif;
-            height: 100vh; height: 100dvh;
-            display: flex; flex-direction: column; overflow: hidden;
-            color: var(--text);
-            transition: background var(--transition), color var(--transition);
-            -webkit-tap-highlight-color: transparent;
-            user-select: none;
-            position: relative;
+            background: var(--bg); font-family: 'Cairo', 'Segoe UI', sans-serif;
+            height: 100vh; height: 100dvh; display: flex; flex-direction: column; overflow: hidden;
+            color: var(--text); transition: background var(--transition), color var(--transition);
+            -webkit-tap-highlight-color: transparent; user-select: none; position: relative;
         }
 
-        /* الهيكل الرئيسي */
-        .app-container {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            position: relative;
-        }
-
+        .app-container { display: flex; flex-direction: column; height: 100%; position: relative; }
         .screen {
-            display: none;
-            flex-direction: column;
-            flex: 1;
-            overflow-y: auto;
-            position: absolute;
-            inset: 0;
-            bottom: 70px; /* ارتفاع شريط التنقل */
-            background: var(--bg);
-            z-index: 1;
-            transition: opacity 0.2s;
+            display: none; flex-direction: column; flex: 1; overflow-y: auto;
+            position: absolute; inset: 0; bottom: 70px; background: var(--bg);
+            z-index: 1; transition: opacity 0.2s;
         }
         .screen.active { display: flex; z-index: 2; }
         .screen.no-nav { bottom: 0; }
-
-        /* الهيدر */
         .app-header {
-            background: var(--surface);
-            padding: 10px 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid var(--border);
-            min-height: 56px;
-            z-index: 20;
-            gap: 8px;
-            position: sticky;
-            top: 0;
+            background: var(--surface); padding: 10px 16px; display: flex; align-items: center;
+            justify-content: space-between; border-bottom: 1px solid var(--border); min-height: 56px;
+            z-index: 20; gap: 8px; position: sticky; top: 0;
         }
         .app-header h2 { font-size: 18px; font-weight: 700; flex: 1; text-align: center; }
         .header-btn {
@@ -106,7 +121,6 @@
         .header-btn:active { transform: scale(0.9); }
         .header-actions { display: flex; gap: 4px; }
 
-        /* شريط البحث */
         .search-bar { padding: 8px 14px; background: var(--surface); border-bottom: 1px solid var(--border); }
         .search-bar input {
             width: 100%; padding: 10px 16px; border-radius: 25px; border: none;
@@ -115,18 +129,17 @@
         }
         .search-bar input:focus { box-shadow: 0 0 0 3px rgba(255,0,80,0.12); }
 
-        /* قائمة الدردشات */
         .chats-list { flex: 1; overflow-y: auto; }
         .chat-item {
             display: flex; align-items: center; gap: 12px; padding: 12px 16px;
-            cursor: pointer; transition: all 0.15s; border-bottom: 1px solid var(--border); position: relative;
+            cursor: pointer; transition: all 0.15s; border-bottom: 1px solid var(--border);
         }
         .chat-item:hover { background: var(--surface2); }
         .chat-item:active { background: var(--surface3); transform: scale(0.98); }
         .chat-avatar {
-            width: 50px; height: 50px; border-radius: 50%; background: var(--surface3);
+            width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent2));
             display: flex; align-items: center; justify-content: center; font-size: 20px;
-            font-weight: 700; flex-shrink: 0; position: relative;
+            font-weight: 700; flex-shrink: 0; position: relative; color: #fff;
         }
         .online-dot {
             position: absolute; bottom: 2px; right: 2px; width: 13px; height: 13px;
@@ -134,7 +147,7 @@
         }
         .chat-info { flex: 1; min-width: 0; }
         .chat-name-row { display: flex; justify-content: space-between; align-items: center; }
-        .chat-name { font-weight: 600; font-size: 15px; color: var(--text); display: flex; align-items: center; gap: 4px; }
+        .chat-name { font-weight: 600; font-size: 15px; display: flex; align-items: center; gap: 4px; }
         .chat-time { font-size: 11px; color: var(--text3); flex-shrink: 0; }
         .chat-preview { display: flex; justify-content: space-between; align-items: center; margin-top: 3px; }
         .last-msg { font-size: 13px; color: var(--text3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px; }
@@ -143,155 +156,76 @@
             min-width: 20px; height: 20px; border-radius: 10px; display: flex;
             align-items: center; justify-content: center; padding: 0 6px; flex-shrink: 0;
         }
-        .pinned-icon { color: var(--accent); font-size: 10px; }
-        .check-mark { font-size: 10px; color: var(--text3); }
-        .check-mark.read { color: var(--blue-check); }
-        .typing-indicator-chat { font-size: 11px; color: var(--green); font-style: italic; animation: pulse 1.2s infinite; }
-        @keyframes pulse { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
 
-        /* شريط القصص */
-        .story-bar {
-            padding: 12px 14px;
-            border-bottom: 1px solid var(--border);
-            overflow-x: auto;
-            white-space: nowrap;
-            display: flex;
-            gap: 12px;
-            background: var(--surface);
-        }
-        .story-bar::-webkit-scrollbar { height: 0; }
-        .story-item {
-            display: inline-flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-            cursor: pointer;
-            min-width: 65px;
-            transition: 0.2s;
-        }
-        .story-item:active { transform: scale(0.95); }
-        .story-ring {
-            width: 60px; height: 60px; border-radius: 50%;
-            background: linear-gradient(135deg, #ff0050, #ff7b00);
-            display: flex; align-items: center; justify-content: center; padding: 3px;
-        }
-        .story-avatar {
-            width: 52px; height: 52px; border-radius: 50%;
-            background: var(--surface3);
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 700; border: 2px solid var(--bg); color: var(--text);
-            overflow: hidden;
-        }
-        .story-add .story-ring { background: var(--surface3); border: 2px dashed var(--accent); }
-        .story-add span { font-size: 28px; color: var(--accent); }
-        .story-name { font-size: 10px; color: var(--text3); max-width: 65px; overflow: hidden; text-overflow: ellipsis; }
-
-        /* عارض القصص */
-        .story-viewer {
-            position: fixed; inset: 0; background: #000; z-index: 3500;
-            display: none; flex-direction: column;
-        }
-        .story-viewer.active { display: flex; }
-        .story-viewer-header {
-            position: absolute; top: 0; left: 0; right: 0; z-index: 3502;
-            display: flex; align-items: center; gap: 10px; padding: 12px 16px;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent);
-        }
-        .story-viewer-close {
-            background: rgba(255,255,255,0.2); border: none; color: #fff;
-            width: 36px; height: 36px; border-radius: 50%; font-size: 20px;
-            display: flex; align-items: center; justify-content: center; cursor: pointer;
-        }
-        .story-viewer-user {
-            display: flex; align-items: center; gap: 8px; color: #fff;
-        }
-        .story-viewer-avatar {
-            width: 36px; height: 36px; border-radius: 50%; border: 2px solid #fff;
-            display: flex; align-items: center; justify-content: center; font-weight: 700;
-        }
-        .story-viewer-time { font-size: 11px; opacity: 0.8; }
-        .story-progress-container {
-            position: absolute; top: 8px; left: 16px; right: 16px;
-            display: flex; gap: 4px; z-index: 3503;
-        }
-        .story-progress-bar {
-            flex: 1; height: 3px; background: rgba(255,255,255,0.3); border-radius: 2px; overflow: hidden;
-        }
-        .story-progress-fill {
-            height: 100%; background: #fff; width: 0%; transition: width 0.1s linear;
-        }
-        .story-content {
-            flex: 1; display: flex; align-items: center; justify-content: center;
-            background: #000;
-        }
-        .story-content img, .story-content video {
-            max-width: 100%; max-height: 80vh; object-fit: contain;
-        }
-        .story-delete-btn {
-            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
-            background: rgba(255,0,0,0.6); border: none; color: #fff; padding: 8px 16px;
-            border-radius: 20px; font-size: 12px; cursor: pointer; z-index: 3504;
-        }
-
-        /* جهات الاتصال */
-        .section-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px 6px; }
-        .section-header h3 { font-size: 15px; font-weight: 700; }
-        .channel-item, .call-item {
-            display: flex; align-items: center; gap: 12px; padding: 12px 16px;
-            border-bottom: 1px solid var(--border); cursor: pointer; transition: 0.15s;
-        }
-        .channel-item:hover, .call-item:hover { background: var(--surface2); }
-        .channel-avatar { width: 44px; height: 44px; border-radius: 12px; background: var(--surface3); display: flex; align-items: center; justify-content: center; font-size: 22px; }
-        .call-avatar { width: 46px; height: 46px; border-radius: 50%; background: var(--surface3); display: flex; align-items: center; justify-content: center; font-weight: 700; }
-        .item-info { flex: 1; min-width: 0; }
-        .item-title { font-weight: 600; font-size: 14px; }
-        .item-sub { font-size: 12px; color: var(--text3); }
-        .invite-btn { background: var(--accent); color: #fff; border: none; border-radius: 25px; padding: 6px 14px; font-weight: 700; cursor: pointer; font-family: inherit; font-size: 11px; }
-
-        /* شاشات أخرى (مكالمات، تحديثات، أدوات) */
-        .tools-grid { padding: 16px; display: flex; flex-direction: column; gap: 14px; }
-        .stat-card { background: var(--surface); border-radius: 18px; padding: 18px; border: 1px solid var(--border); }
-        .stat-row { display: flex; gap: 10px; }
-        .stat-box { flex: 1; text-align: center; background: #0f0f0f; border-radius: 12px; padding: 14px 8px; }
-        .stat-num { font-size: 28px; font-weight: 900; }
-        .stat-label { font-size: 11px; color: var(--text3); }
-        .promo-card { background: linear-gradient(135deg, #ff0050, #ff7b00); border-radius: 18px; padding: 20px; color: #fff; }
-        .promo-card h4 { font-size: 16px; margin-bottom: 4px; }
-        .promo-card p { font-size: 12px; opacity: 0.9; margin-bottom: 12px; }
-        .promo-btn { background: #fff; color: #ff0050; border: none; border-radius: 25px; padding: 10px 20px; font-weight: 700; cursor: pointer; font-family: inherit; transition: 0.2s; }
-        .tool-row { background: var(--surface); border-radius: 14px; padding: 14px; display: flex; align-items: center; gap: 12px; border: 1px solid var(--border); cursor: pointer; transition: 0.2s; }
-        .tool-row:hover { border-color: var(--accent); }
-        .tool-icon { width: 44px; height: 44px; background: var(--surface3); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; }
-        .tool-info { flex: 1; }
-        .tool-name { font-weight: 700; font-size: 14px; }
-        .tool-desc { font-size: 11px; color: var(--text3); }
-
-        /* الإعدادات */
-        .settings-list { padding: 16px; }
-        .setting-item { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; background: var(--surface); border-radius: 14px; margin-bottom: 8px; cursor: pointer; transition: 0.2s; border: 1px solid var(--border); }
-        .setting-item:hover { background: var(--surface2); }
-        .setting-left { display: flex; align-items: center; gap: 12px; }
-        .setting-icon { width: 38px; height: 38px; background: var(--surface3); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; }
-        .toggle-sw { width: 48px; height: 26px; background: var(--border); border-radius: 13px; position: relative; cursor: pointer; transition: 0.3s; }
-        .toggle-sw.active { background: var(--accent); }
-        .toggle-sw::after { content: ''; position: absolute; width: 22px; height: 22px; background: #fff; border-radius: 50%; top: 2px; right: 2px; transition: 0.3s; }
-        .toggle-sw.active::after { right: 24px; }
-
-        /* شريط التنقل السفلي */
         .bottom-nav {
             position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface);
             display: flex; justify-content: space-around; padding: 6px 0 10px;
             border-top: 1px solid var(--border); z-index: 100; max-width: 600px; margin: 0 auto;
         }
-        .nav-item { background: none; border: none; color: var(--text3); display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; font-family: inherit; padding: 4px 8px; border-radius: 12px; transition: 0.2s; font-size: 10px; font-weight: 600; min-width: 55px; }
+        .nav-item {
+            background: none; border: none; color: var(--text3); display: flex; flex-direction: column;
+            align-items: center; gap: 3px; cursor: pointer; font-family: inherit; padding: 4px 8px;
+            border-radius: 12px; transition: 0.2s; font-size: 10px; font-weight: 600; min-width: 55px;
+        }
         .nav-item i { font-size: 20px; }
         .nav-item.active { color: var(--accent); }
 
-        /* نافذة منبثقة للمستخدم */
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px); z-index: 2000; display: none; align-items: center; justify-content: center; }
+        /* ========== الزر العائم (FAB) ========== */
+        .fab-container {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            z-index: 200;
+        }
+        .fab-main {
+            width: 56px; height: 56px; border-radius: 50%; background: var(--accent);
+            border: none; color: white; font-size: 24px; cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;
+        }
+        .fab-options {
+            position: absolute; bottom: 70px; right: 0;
+            display: flex; flex-direction: column; gap: 12px;
+            opacity: 0; visibility: hidden; transform: translateY(20px);
+            transition: 0.2s;
+        }
+        .fab-options.show {
+            opacity: 1; visibility: visible; transform: translateY(0);
+        }
+        .fab-option {
+            width: 48px; height: 48px; border-radius: 50%; background: var(--surface);
+            border: 1px solid var(--border); color: var(--text); font-size: 20px;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+        }
+
+        .section-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px 6px; }
+        .section-header h3 { font-size: 15px; font-weight: 700; }
+        .settings-list { padding: 16px; }
+        .setting-item {
+            display: flex; align-items: center; justify-content: space-between; padding: 14px 16px;
+            background: var(--surface); border-radius: 14px; margin-bottom: 8px; cursor: pointer;
+            transition: 0.2s; border: 1px solid var(--border);
+        }
+        .setting-item:hover { background: var(--surface2); }
+        .setting-left { display: flex; align-items: center; gap: 12px; }
+        .setting-icon { width: 38px; height: 38px; background: var(--surface3); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+        .toggle-sw { width: 48px; height: 26px; background: var(--border); border-radius: 13px; position: relative; cursor: pointer; transition: 0.3s; flex-shrink: 0; }
+        .toggle-sw.active { background: var(--accent); }
+        .toggle-sw::after { content: ''; position: absolute; width: 22px; height: 22px; background: #fff; border-radius: 50%; top: 2px; right: 2px; transition: 0.3s; }
+        .toggle-sw.active::after { right: 24px; }
+
+        .empty-state { text-align: center; padding: 60px 20px; color: var(--text3); }
+        .empty-state i { font-size: 48px; margin-bottom: 12px; opacity: 0.5; }
+
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
+            z-index: 2000; display: none; align-items: center; justify-content: center;
+        }
         .modal-overlay.active { display: flex; }
-        .modal-card { background: var(--surface); border-radius: 24px; width: 320px; max-width: 90%; overflow: hidden; box-shadow: var(--shadow); text-align: center; animation: popIn 0.3s ease; }
-        @keyframes popIn { from { opacity: 0; transform: scale(0.85) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        .modal-card {
+            background: var(--surface); border-radius: 24px; width: 320px; max-width: 90%;
+            overflow: hidden; box-shadow: var(--shadow); text-align: center; animation: popIn 0.3s ease;
+        }
+        @keyframes popIn { from { opacity: 0; transform: scale(0.85) translateY(20px); } }
         .modal-avatar { width: 100px; height: 100px; border-radius: 50%; margin: 24px auto 10px; border: 3px solid var(--accent); display: flex; align-items: center; justify-content: center; font-size: 40px; font-weight: 800; background: var(--surface3); color: var(--text); }
         .modal-name { font-size: 20px; font-weight: 800; margin-bottom: 4px; }
         .modal-bio { font-size: 12px; color: var(--text3); padding: 0 16px 12px; }
@@ -301,14 +235,22 @@
         .modal-action span { font-size: 10px; color: var(--text3); }
         .modal-close { position: absolute; top: 16px; left: 16px; background: rgba(0,0,0,0.5); border: none; color: #fff; font-size: 20px; cursor: pointer; width: 38px; height: 38px; border-radius: 50%; z-index: 2001; }
 
-        /* عارض الصور */
-        .image-viewer { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 3000; display: none; align-items: center; justify-content: center; cursor: zoom-out; }
-        .image-viewer.active { display: flex; }
-        .image-viewer img { max-width: 95vw; max-height: 90vh; border-radius: 8px; box-shadow: 0 0 60px rgba(0,0,0,0.8); animation: zoomIn 0.25s ease; }
-        @keyframes zoomIn { from { transform: scale(0.8); opacity: 0; } }
-        .image-viewer-close { position: absolute; top: 20px; left: 20px; background: rgba(255,255,255,0.2); border: none; color: #fff; font-size: 24px; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; }
+        .popup-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1500;
+            display: none; justify-content: flex-end; align-items: flex-start; backdrop-filter: blur(2px);
+        }
+        .popup-overlay.active { display: flex; }
+        .popup-menu {
+            background: var(--surface); border-radius: 16px; margin: 60px 12px 0 0; width: 260px;
+            box-shadow: var(--shadow); border: 1px solid var(--border); overflow: hidden; animation: slideIn 0.25s ease;
+        }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(-12px); } }
+        .popup-item { display: flex; align-items: center; gap: 12px; padding: 13px 16px; cursor: pointer; color: var(--text2); font-size: 13px; border-bottom: 1px solid var(--border); transition: 0.15s; }
+        .popup-item:last-child { border-bottom: none; }
+        .popup-item:hover { background: var(--surface3); }
+        .popup-item i { width: 20px; font-size: 16px; color: var(--text3); text-align: center; }
+        .popup-item.danger { color: #ff4444; }
 
-        /* Toast */
         .global-toast {
             position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
             background: #333; color: #fff; padding: 10px 20px; border-radius: 25px;
@@ -316,39 +258,46 @@
             pointer-events: none; white-space: nowrap; box-shadow: var(--shadow); font-family: 'Cairo';
         }
 
-        /* حالة فارغة */
-        .empty-state { text-align: center; padding: 60px 20px; color: var(--text3); }
-        .empty-state i { font-size: 48px; margin-bottom: 12px; opacity: 0.5; }
-
-        /* قائمة منبثقة */
-        .ramzapp-popup-menu {
-            animation: slideIn 0.2s ease;
-        }
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(-8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .popup-item {
-            display: flex; align-items: center; gap: 12px; padding: 13px 16px;
-            cursor: pointer; color: var(--text2); font-size: 13px;
-            border-bottom: 1px solid var(--border); transition: background 0.15s;
-        }
-        .popup-item:last-child { border-bottom: none; }
-        .popup-item:hover { background: var(--surface3); }
-        .popup-item i { width: 20px; font-size: 16px; color: var(--accent); text-align: center; }
-        .popup-item.danger { color: #ff4444; }
-        .popup-item.danger i { color: #ff4444; }
-
-        /* طلبات الصداقة */
-        .requests-tabs .tab.active {
-            color: var(--accent);
-            border-bottom: 2px solid var(--accent);
-        }
+        @media (max-width: 380px) { .chat-name { font-size: 14px; } .nav-item { font-size: 9px; } }
     </style>
+
+    <!-- كشف تلقائي لفشل FontAwesome وتفعيل النظام الاحتياطي -->
+    <script>
+        (function checkFontAwesome() {
+            window.addEventListener('load', function() {
+                const testIcon = document.createElement('i');
+                testIcon.className = 'fas fa-home';
+                testIcon.style.visibility = 'hidden';
+                document.body.appendChild(testIcon);
+                const style = window.getComputedStyle(testIcon, ':before');
+                const content = style.getPropertyValue('content');
+                document.body.removeChild(testIcon);
+                if (!content || content === 'none' || content === '') {
+                    document.body.classList.add('no-fa');
+                } else {
+                    document.body.classList.remove('no-fa');
+                }
+            });
+            setTimeout(function() {
+                if (!document.body.classList.contains('no-fa')) {
+                    const testIcon = document.createElement('i');
+                    testIcon.className = 'fas fa-home';
+                    testIcon.style.visibility = 'hidden';
+                    document.body.appendChild(testIcon);
+                    const style = window.getComputedStyle(testIcon, ':before');
+                    const content = style.getPropertyValue('content');
+                    document.body.removeChild(testIcon);
+                    if (!content || content === 'none' || content === '') {
+                        document.body.classList.add('no-fa');
+                    }
+                }
+            }, 3000);
+        })();
+    </script>
 </head>
 <body>
 <div class="app-container" id="appContainer">
-    <!-- ========= شاشة الدردشات ========= -->
+    <!-- شاشة الدردشات -->
     <div class="screen active" id="chatsScreen">
         <div class="app-header">
             <button class="header-btn" id="settingsBtn"><i class="fas fa-cog"></i></button>
@@ -359,290 +308,234 @@
                 <button class="header-btn" id="mainMenuBtn"><i class="fas fa-ellipsis-v"></i></button>
             </div>
         </div>
-        <!-- شريط القصص -->
-        <div class="story-bar" id="storyBar" style="display:none;"></div>
         <div class="search-bar"><input type="text" id="searchChatsInput" placeholder="🔍 بحث في المحادثات..."></div>
         <div class="chats-list" id="chatsList"></div>
     </div>
 
-    <!-- ========= شاشة جهات الاتصال ========= -->
+    <!-- شاشة المحادثة (مبسطة) -->
+    <div class="screen no-nav" id="chatScreen">
+        <div class="app-header">
+            <button class="header-btn" id="backFromChatBtn"><i class="fas fa-arrow-right"></i></button>
+            <h2 id="chatScreenTitle">محادثة</h2>
+        </div>
+        <div style="flex:1; display:flex; align-items:center; justify-content:center; color:var(--text3);">
+            <p>⏳ جاري تحميل المحادثة...</p>
+        </div>
+    </div>
+
+    <!-- شاشة جهات الاتصال (تمت إضافة الزر العائم) -->
     <div class="screen" id="contactsScreen">
         <div class="app-header">
             <button class="header-btn" id="backFromContactsBtn"><i class="fas fa-arrow-right"></i></button>
             <h2>📇 جهات الاتصال</h2>
-            <button class="header-btn" id="addContactManuallyBtn"><i class="fas fa-user-plus"></i></button>
+            <button class="header-btn" id="addContactBtn"><i class="fas fa-user-plus"></i></button>
         </div>
-        <div class="search-bar">
-            <input type="text" id="searchContactsInput" placeholder="🔍 اسم أو رقم الهاتف...">
-        </div>
-        <div class="chats-list" id="contactsListContainer"></div>
-    </div>
+        <div class="search-bar"><input type="text" id="searchContactsInput" placeholder="🔍 بحث في جهات الاتصال..."></div>
+        <div class="chats-list" id="contactsList"></div>
 
-    <!-- ========= شاشة الاستكشاف ========= -->
-    <div class="screen" id="exploreScreen">
-        <div class="app-header">
-            <h2>🧭 استكشاف</h2>
-            <button class="header-btn" id="requestsMenuBtn"><i class="fas fa-user-plus"></i><span id="requestsBadge" style="position:absolute;top:2px;right:2px;background:red;color:#fff;border-radius:50%;width:18px;height:18px;font-size:10px;display:none;align-items:center;justify-content:center;">0</span></button>
-        </div>
-        <div class="search-bar"><input type="text" id="searchUsersInput" placeholder="🔍 ابحث عن أشخاص..."></div>
-        <div class="chats-list" id="searchResultsList">
-            <p style="text-align:center;color:var(--text3);padding:20px;">ابدأ البحث عن أصدقاء جدد</p>
+        <!-- الزر العائم للإجراءات -->
+        <div class="fab-container" id="fabContainer">
+            <button class="fab-main" id="fabMainBtn"><i class="fas fa-plus"></i></button>
+            <div class="fab-options" id="fabOptions">
+                <button class="fab-option" id="fabAddContact"><i class="fas fa-user-plus"></i></button>
+                <button class="fab-option" id="fabRegisterNumber"><i class="fas fa-phone-alt"></i></button>
+                <button class="fab-option" id="fabInviteNumber"><i class="fas fa-share-alt"></i></button>
+                <button class="fab-option" id="fabAddToGroup"><i class="fas fa-users"></i></button>
+            </div>
         </div>
     </div>
 
-    <!-- ========= شاشة المكالمات ========= -->
+    <!-- شاشة المكالمات -->
     <div class="screen" id="callsScreen">
         <div class="app-header"><h2>📞 المكالمات</h2></div>
         <div class="chats-list" id="callsList"></div>
     </div>
 
-    <!-- ========= شاشة التحديثات ========= -->
+    <!-- شاشة التحديثات -->
     <div class="screen" id="updatesScreen">
         <div class="app-header"><h2>🔄 التحديثات</h2></div>
-        <div class="section-header"><h3>القنوات</h3><button class="header-btn" id="createChannelBtn"><i class="fas fa-plus-circle"></i></button></div>
-        <div id="channelsList" style="flex:1; overflow-y:auto;"></div>
+        <div class="story-bar" id="storyBar"></div>
+        <div class="section-header"><h3>القنوات</h3></div>
+        <div id="channelsList" style="flex:1;overflow-y:auto;"></div>
     </div>
 
-    <!-- ========= شاشة الأدوات ========= -->
+    <!-- شاشة الأدوات -->
     <div class="screen" id="toolsScreen">
         <div class="app-header"><h2>🛠 الأدوات</h2></div>
-        <div class="tools-grid">
-            <div class="stat-card"><div style="color:var(--text3);font-size:12px;margin-bottom:12px;">📊 الأداء في آخر 7 أيام</div><div class="stat-row"><div class="stat-box"><div class="stat-num" id="statViews">0</div><div class="stat-label">مشاهدات</div></div><div class="stat-box"><div class="stat-num" id="statCatalog">0</div><div class="stat-label">الكتالوج</div></div><div class="stat-box"><div class="stat-num" id="statChats">0</div><div class="stat-label">محادثات</div></div></div></div>
+        <div class="tools-grid" style="padding:16px; display:flex; flex-direction:column; gap:14px;">
+            <div class="stat-card"><div style="color:var(--text3);font-size:12px;margin-bottom:12px;">📊 الأداء في آخر 7 أيام</div><div class="stat-row" style="display:flex; gap:10px;"><div class="stat-box" style="flex:1;text-align:center;background:var(--surface3);border-radius:12px;padding:14px 8px;"><div class="stat-num" style="font-size:28px;font-weight:900;" id="statViews">0</div><div class="stat-label" style="font-size:11px;color:var(--text3);">مشاهدات</div></div><div class="stat-box" style="flex:1;text-align:center;background:var(--surface3);border-radius:12px;padding:14px 8px;"><div class="stat-num" style="font-size:28px;font-weight:900;" id="statCatalog">0</div><div class="stat-label" style="font-size:11px;color:var(--text3);">الكتالوج</div></div><div class="stat-box" style="flex:1;text-align:center;background:var(--surface3);border-radius:12px;padding:14px 8px;"><div class="stat-num" style="font-size:28px;font-weight:900;" id="statChats">0</div><div class="stat-label" style="font-size:11px;color:var(--text3);">محادثات</div></div></div></div>
             <div class="promo-card"><h4>🌟 أنشئ أول إعلان لك</h4><p>يمكنك الوصول إلى عملاء جدد من خلال إعلانات Ramz-App.</p><button class="promo-btn" id="startAdBtn">بدء الاستخدام</button></div>
             <div class="tool-row" id="catalogBtn"><div class="tool-icon"><i class="fas fa-boxes"></i></div><div class="tool-info"><div class="tool-name">الكتالوج</div><div class="tool-desc">عرض المنتجات والخدمات</div></div><i class="fas fa-chevron-left" style="color:var(--text3);"></i></div>
             <div class="tool-row" id="broadcastBtn"><div class="tool-icon"><i class="fas fa-bullhorn"></i></div><div class="tool-info"><div class="tool-name">الرسائل الجماعية</div><div class="tool-desc">تواصل مع عملائك دفعة واحدة</div></div><i class="fas fa-chevron-left" style="color:var(--text3);"></i></div>
         </div>
     </div>
 
-    <!-- ========= شاشة الإعدادات ========= -->
+    <!-- شاشة الملف الشخصي -->
+    <div class="screen no-nav" id="profileScreen">
+        <div class="app-header"><button class="header-btn" id="backFromProfileBtn"><i class="fas fa-arrow-right"></i></button><h2>الملف الشخصي</h2></div>
+        <div class="profile-section" style="text-align:center;padding:30px 20px;">
+            <div class="profile-avatar-lg" id="profileAvatar" style="width:100px;height:100px;border-radius:50%;background:var(--surface3);display:flex;align-items:center;justify-content:center;font-size:42px;font-weight:800;margin:0 auto 14px;border:3px solid var(--accent);">?</div>
+            <div class="profile-name-lg" id="profileName" style="font-size:24px;font-weight:800;"></div>
+            <div class="profile-bio-lg" id="profileBio" style="color:var(--text3);margin:6px 0 16px;"></div>
+            <button class="promo-btn" id="profileChatBtn" style="background:var(--accent);color:#fff;border:none;border-radius:25px;padding:10px 20px;font-weight:700;cursor:pointer;font-family:inherit;transition:0.2s;">💬 مراسلة</button>
+        </div>
+    </div>
+
+    <!-- شاشة الإعدادات -->
     <div class="screen no-nav" id="settingsScreen">
-        <div class="app-header">
-            <button class="header-btn" id="closeSettingsBtn"><i class="fas fa-arrow-right"></i></button>
-            <h2>⚙️ الإعدادات</h2>
-        </div>
+        <div class="app-header"><button class="header-btn" id="closeSettingsBtn"><i class="fas fa-arrow-right"></i></button><h2>⚙️ الإعدادات</h2></div>
         <div class="settings-list">
-            <div class="setting-item" id="themeToggle">
-                <div class="setting-left"><div class="setting-icon"><i class="fas fa-moon"></i></div><span>الوضع الليلي</span></div>
-                <div class="toggle-sw active" id="themeSwitch"></div>
-            </div>
-            <div class="setting-item" id="notifToggle">
-                <div class="setting-left"><div class="setting-icon"><i class="fas fa-bell"></i></div><span>الإشعارات</span></div>
-                <div class="toggle-sw active" id="notifSwitch"></div>
-            </div>
-            <div class="setting-item" onclick="window.exportData()">
-                <div class="setting-left"><div class="setting-icon"><i class="fas fa-download"></i></div><span>تصدير المحادثات</span></div>
-                <i class="fas fa-chevron-left"></i>
-            </div>
-            <div class="setting-item" onclick="window.importData()">
-                <div class="setting-left"><div class="setting-icon"><i class="fas fa-upload"></i></div><span>استيراد النسخة الاحتياطية</span></div>
-                <i class="fas fa-chevron-left"></i>
-            </div>
-            <div class="setting-item" onclick="window.clearAllData()">
-                <div class="setting-left"><div class="setting-icon"><i class="fas fa-trash-alt"></i></div><span>حذف جميع المحادثات</span></div>
-                <i class="fas fa-chevron-left" style="color:#ff4444;"></i>
-            </div>
-            <div class="setting-item" onclick="window.deleteAccount()">
-                <div class="setting-left"><div class="setting-icon"><i class="fas fa-user-slash"></i></div><span>حذف الحساب نهائياً</span></div>
-                <i class="fas fa-chevron-left" style="color:#ff4444;"></i>
-            </div>
-            <p style="font-size:10px;color:var(--text3);text-align:center;margin-top:-6px;margin-bottom:8px;">
-                بعد الحذف، يمكنك التسجيل مجدداً بنفس رقم الهاتف.
-            </p>
-            <div class="setting-item" onclick="window.logout()">
-                <div class="setting-left"><div class="setting-icon"><i class="fas fa-sign-out-alt"></i></div><span>تسجيل الخروج</span></div>
-                <i class="fas fa-chevron-left" style="color:#ff4444;"></i>
-            </div>
-            <p style="text-align:center;color:var(--text3);margin-top:16px;font-size:11px;">Ramz-App v1.0 | جميع الحقوق محفوظة © 2026</p>
+            <div class="setting-item" id="themeToggle"><div class="setting-left"><div class="setting-icon"><i class="fas fa-moon"></i></div><span>الوضع الليلي</span></div><div class="toggle-sw active" id="themeSwitch"></div></div>
+            <div class="setting-item" id="notifToggle"><div class="setting-left"><div class="setting-icon"><i class="fas fa-bell"></i></div><span>الإشعارات</span></div><div class="toggle-sw active" id="notifSwitch"></div></div>
+            <div class="setting-item" onclick="window.location.href='login.html'; localStorage.removeItem('ramzapp_user');"><div class="setting-left"><div class="setting-icon"><i class="fas fa-sign-out-alt"></i></div><span>تسجيل الخروج</span></div><i class="fas fa-chevron-left" style="color:#ff4444;"></i></div>
+            <p style="text-align:center;color:var(--text3);margin-top:16px;font-size:11px;">Ramz-App v2.0 | جميع الحقوق محفوظة © 2026</p>
         </div>
     </div>
-
-    <!-- ========= نافذة المستخدم ========= -->
-    <div class="modal-overlay" id="userModal">
-        <button class="modal-close" id="closeModalBtn">&times;</button>
-        <div class="modal-card">
-            <div class="modal-avatar" id="modalAvatar">?</div>
-            <div class="modal-name" id="modalName"></div>
-            <div class="modal-bio" id="modalBio"></div>
-            <div class="modal-actions">
-                <button class="modal-action" id="modalChatBtn"><i class="fas fa-comment-dots"></i><span>محادثة</span></button>
-                <button class="modal-action" id="modalCallBtn"><i class="fas fa-phone"></i><span>اتصال</span></button>
-                <button class="modal-action" id="modalVideoBtn"><i class="fas fa-video"></i><span>مكالمة</span></button>
-                <button class="modal-action" id="modalInfoBtn"><i class="fas fa-info-circle"></i><span>معلومات</span></button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ========= مودال طلبات الصداقة ========= -->
-    <div class="modal-overlay" id="requestsModal">
-        <div class="modal-card" style="max-width:400px;">
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:16px;border-bottom:1px solid var(--border);">
-                <h3 style="margin:0;">📩 طلبات الصداقة</h3>
-                <button class="modal-close" id="closeRequestsModalBtn" style="position:static;background:none;color:var(--text);">&times;</button>
-            </div>
-            <div class="requests-tabs" style="display:flex;border-bottom:1px solid var(--border);">
-                <button class="tab active" data-tab="received" style="flex:1;padding:10px;background:none;border:none;color:var(--accent);border-bottom:2px solid var(--accent);font-family:inherit;font-weight:600;">واردة</button>
-                <button class="tab" data-tab="sent" style="flex:1;padding:10px;background:none;border:none;color:var(--text3);border-bottom:2px solid transparent;font-family:inherit;">صادرة</button>
-            </div>
-            <div id="requestsContent" style="max-height:300px;overflow-y:auto;padding:8px 0;"></div>
-        </div>
-    </div>
-
-    <!-- ========= عارض الصور ========= -->
-    <div class="image-viewer" id="imageViewer">
-        <button class="image-viewer-close" id="closeImageViewer">&times;</button>
-        <img src="" alt="صورة" id="viewerImage">
-    </div>
-
-    <!-- ========= عارض القصص ========= -->
-    <div class="story-viewer" id="storyViewer">
-        <div class="story-progress-container" id="storyProgressContainer"></div>
-        <div class="story-viewer-header">
-            <button class="story-viewer-close" id="closeStoryViewer">&times;</button>
-            <div class="story-viewer-user">
-                <div class="story-viewer-avatar" id="storyViewerAvatar">?</div>
-                <div>
-                    <div style="font-weight:600;" id="storyViewerName"></div>
-                    <div class="story-viewer-time" id="storyViewerTime"></div>
-                </div>
-            </div>
-            <button class="story-delete-btn" id="deleteStoryBtn" style="display:none;">🗑 حذف</button>
-        </div>
-        <div class="story-content" id="storyContent"></div>
-    </div>
-
-    <!-- ملف مخفي لرفع القصص -->
-    <input type="file" id="storyFileInput" style="display:none;" accept="image/*,video/*">
 </div>
 
-<!-- ========= شريط التنقل السفلي ========= -->
+<!-- شريط التنقل السفلي -->
 <div class="bottom-nav" id="bottomNav">
     <button class="nav-item active" data-nav="chats"><i class="fas fa-comment-dots"></i><span>الدردشات</span></button>
     <button class="nav-item" data-nav="contacts"><i class="fas fa-address-book"></i><span>جهات الاتصال</span></button>
-    <button class="nav-item" data-nav="explore"><i class="fas fa-compass"></i><span>استكشاف</span></button>
     <button class="nav-item" data-nav="calls"><i class="fas fa-phone"></i><span>المكالمات</span></button>
     <button class="nav-item" data-nav="updates"><i class="fas fa-sync-alt"></i><span>التحديثات</span></button>
     <button class="nav-item" data-nav="tools"><i class="fas fa-tools"></i><span>الأدوات</span></button>
 </div>
 
+<!-- النوافذ المنبثقة الأخرى -->
+<div class="modal-overlay" id="userModal">
+    <button class="modal-close" id="closeModalBtn">&times;</button>
+    <div class="modal-card">
+        <div class="modal-avatar" id="modalAvatar">?</div>
+        <div class="modal-name" id="modalName"></div>
+        <div class="modal-bio" id="modalBio"></div>
+        <div class="modal-actions">
+            <button class="modal-action" id="modalChatBtn"><i class="fas fa-comment-dots"></i><span>محادثة</span></button>
+            <button class="modal-action" id="modalCallBtn"><i class="fas fa-phone"></i><span>اتصال</span></button>
+            <button class="modal-action" id="modalVideoBtn"><i class="fas fa-video"></i><span>مكالمة</span></button>
+            <button class="modal-action" id="modalInfoBtn"><i class="fas fa-info-circle"></i><span>معلومات</span></button>
+        </div>
+    </div>
+</div>
+<div class="popup-overlay" id="popupOverlay">
+    <div class="popup-menu" id="popupMenu"></div>
+</div>
+
 <script type="module">
-    import {
-        supabase,
-        getCurrentUser,
-        fetchChats,
-        fetchRegisteredUsers,
-        searchUsers,
-        sendFriendRequest,
-        acceptFriendRequest,
-        rejectFriendRequest,
-        getPendingReceivedRequests,
-        getPendingSentRequests,
-        setOnlineStatus,
-        toast,
-        timeAgo,
-        esc,
-        loadSettings,
-        saveSettings,
-        localSettings,
-        showPopupMenu,
-        generateChatLink,
-        findUserByPhone,
-        uploadStory,
-        fetchStories,
-        deleteStory,
-        deleteUserAccount
-    } from './common.js';
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-    // ========== المتغيرات العامة ==========
+    const SUPABASE_URL = 'https://serlegwdzjulfcxabxzv.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_4_c97KxnG_7HTvfv-pKeNQ_FTlnK6Yx';
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const $ = (s) => document.querySelector(s);
+    const $$ = (s) => document.querySelectorAll(s);
+
+    function timeAgo(d) {
+        if (!d) return '';
+        const df = Math.floor((Date.now() - new Date(d).getTime()) / 1000);
+        if (df < 60) return 'الآن';
+        if (df < 3600) return Math.floor(df / 60) + ' د';
+        if (df < 86400) return Math.floor(df / 3600) + ' س';
+        return Math.floor(df / 86400) + ' يوم';
+    }
+    function esc(s) { return s ? s.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[m]) : ''; }
+    function toast(msg, duration = 2000) {
+        const existing = document.querySelector('.global-toast');
+        if (existing) existing.remove();
+        const el = document.createElement('div');
+        el.className = 'global-toast';
+        el.textContent = msg;
+        document.body.appendChild(el);
+        requestAnimationFrame(() => el.style.opacity = '1');
+        setTimeout(() => { el.style.opacity = '0'; setTimeout(() => el.remove(), 300); }, duration);
+    }
+
+    async function getCurrentUser() {
+        const raw = localStorage.getItem('ramzapp_user');
+        if (!raw) { window.location.href = 'login.html'; return null; }
+        try { return JSON.parse(raw); } catch (e) { return null; }
+    }
+
+    function loadTheme() {
+        const theme = localStorage.getItem('ramzapp_theme') || 'dark';
+        document.body.classList.toggle('light-theme', theme === 'light');
+        const ts = $('#themeSwitch');
+        if (ts) ts.classList.toggle('active', theme === 'dark');
+    }
+    function toggleTheme() {
+        const isLight = document.body.classList.toggle('light-theme');
+        localStorage.setItem('ramzapp_theme', isLight ? 'light' : 'dark');
+        const ts = $('#themeSwitch');
+        if (ts) ts.classList.toggle('active', !isLight);
+        toast(isLight ? '☀️ الوضع النهاري' : '🌙 الوضع الليلي');
+    }
+    loadTheme();
+
+    // ==================== التنقل بين الشاشات ====================
     let currentScreen = 'chats';
-    let selectedModalUser = null;
-    let currentStoryGroups = [];
-    let currentStoryGroupIndex = 0;
-    let currentStoryIndex = 0;
-    let storyInterval = null;
-
-    // ========== تهيئة ==========
-    async function init() {
-        loadSettings();
-        applyTheme();
-
-        const user = await getCurrentUser();
-        if (!user) {
-            window.location.href = 'login.html';
-            return;
-        }
-        await setOnlineStatus(true);
-        window.addEventListener('beforeunload', () => setOnlineStatus(false));
-
-        // ضبط أزرار الإعدادات
-        document.getElementById('themeSwitch').classList.toggle('active', localSettings.theme === 'dark');
-        document.getElementById('notifSwitch').classList.toggle('active', localSettings.notifications);
-
-        // عرض الدردشات
-        showScreen('chats');
-        renderChats();
-        renderStoryBar();
-
-        // تحديث دوري (كل 10 ثوان)
-        setInterval(() => {
-            if (currentScreen === 'chats') renderChats();
-            if (currentScreen === 'chats') renderStoryBar();
-        }, 10000);
-
-        // تحديث شارة الطلبات
-        updateRequestsBadge();
-        setInterval(updateRequestsBadge, 30000);
-    }
-
-    function applyTheme() {
-        document.body.classList.toggle('light-theme', localSettings.theme === 'light');
-    }
-
-    // ========== التنقل بين الشاشات ==========
-    function showScreen(screenName) {
-        currentScreen = screenName;
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        const target = document.getElementById(screenName + 'Screen');
+    function showScreen(name) {
+        currentScreen = name;
+        $$('.screen').forEach(s => s.classList.remove('active'));
+        const target = document.getElementById(name + 'Screen');
         if (target) target.classList.add('active');
-
-        // إخفاء/إظهار شريط التنقل
-        const noNav = ['settingsScreen'].includes(screenName + 'Screen');
-        document.getElementById('bottomNav').style.display = noNav ? 'none' : 'flex';
-
-        // تحديث نشاط أزرار التنقل
-        document.querySelectorAll('.nav-item').forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.nav === screenName);
-        });
-
-        // تحميل محتوى الشاشات عند الانتقال
-        if (screenName === 'chats') { renderChats(); renderStoryBar(); }
-        if (screenName === 'contacts') renderContactsScreen();
-        if (screenName === 'explore') {} // يتم بالبحث
-        if (screenName === 'calls') renderCallsScreen();
-        if (screenName === 'updates') renderUpdatesScreen();
-        if (screenName === 'tools') updateStats();
+        const noNav = ['chatScreen', 'profileScreen', 'settingsScreen'].includes(name + 'Screen');
+        const bottomNav = $('#bottomNav');
+        if (bottomNav) bottomNav.style.display = noNav ? 'none' : 'flex';
+        $$('.nav-item').forEach(b => b.classList.toggle('active', b.dataset.nav === name));
+        if (name === 'chats') renderChats();
+        if (name === 'contacts') renderContacts();
+        if (name === 'calls') renderCalls();
+        if (name === 'updates') { renderStories(); renderChannels(); }
+        updateStats();
     }
 
-    document.querySelectorAll('.nav-item').forEach(btn => {
-        btn.addEventListener('click', () => showScreen(btn.dataset.nav));
-    });
+    $$('.nav-item').forEach(b => b.addEventListener('click', () => showScreen(b.dataset.nav)));
+    $('#settingsBtn').addEventListener('click', () => showScreen('settings'));
+    $('#closeSettingsBtn').addEventListener('click', () => showScreen('chats'));
+    $('#contactsBtn').addEventListener('click', () => showScreen('contacts'));
+    $('#backFromContactsBtn').addEventListener('click', () => showScreen('chats'));
+    $('#backFromProfileBtn').addEventListener('click', () => showScreen('chats'));
+    $('#backFromChatBtn').addEventListener('click', () => showScreen('chats'));
+    $('#searchBtn').addEventListener('click', () => { $('#searchChatsInput').focus(); showScreen('chats'); });
 
-    document.getElementById('settingsBtn').addEventListener('click', () => showScreen('settings'));
-    document.getElementById('closeSettingsBtn').addEventListener('click', () => showScreen('chats'));
-    document.getElementById('contactsBtn').addEventListener('click', () => showScreen('contacts'));
-    document.getElementById('backFromContactsBtn').addEventListener('click', () => showScreen('chats'));
-
-    // ========== شاشة الدردشات ==========
+    // ==================== شاشة الدردشات ====================
     async function renderChats(filter = '') {
-        const container = document.getElementById('chatsList');
-        container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text3);">⏳ جاري التحميل...</div>';
+        const container = $('#chatsList');
+        container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text3);">⏳ جاري التحميل...</div>';
         try {
-            let chats = await fetchChats();
+            const user = await getCurrentUser();
+            if (!user) return;
+            const { data: users, error } = await supabase.from('users').select('*').neq('id', user.id);
+            if (error) throw error;
+            if (!users || users.length === 0) {
+                container.innerHTML = '<div class="empty-state"><i class="fas fa-comments"></i><p>لا توجد محادثات بعد</p></div>';
+                return;
+            }
+            const chats = await Promise.all(users.map(async (u) => {
+                const { data: lastMsgs } = await supabase.from('messages').select('content, created_at')
+                    .or(`and(sender_id.eq.${user.id},receiver_id.eq.${u.id}),and(sender_id.eq.${u.id},receiver_id.eq.${user.id})`)
+                    .order('created_at', { ascending: false }).limit(1);
+                const { count: unreadCount } = await supabase.from('messages').select('*', { count: 'exact', head: true })
+                    .eq('sender_id', u.id).eq('receiver_id', user.id).neq('status', 'read');
+                return {
+                    id: u.id,
+                    name: u.name || 'مستخدم',
+                    avatar: u.avatar || '?',
+                    online: u.is_online,
+                    lastMsg: lastMsgs?.[0]?.content || '',
+                    lastTime: lastMsgs?.[0]?.created_at || u.last_seen,
+                    unread: unreadCount || 0,
+                    pinned: false
+                };
+            }));
+            chats.sort((a, b) => new Date(b.lastTime || 0) - new Date(a.lastTime || 0));
             if (filter) {
                 const q = filter.toLowerCase();
                 chats = chats.filter(c => c.name.toLowerCase().includes(q));
             }
             if (chats.length === 0) {
-                container.innerHTML = '<div class="empty-state"><i class="fas fa-comments"></i><p>لا توجد محادثات</p></div>';
+                container.innerHTML = '<div class="empty-state"><i class="fas fa-comments"></i><p>لا توجد نتائج</p></div>';
                 return;
             }
             container.innerHTML = '';
@@ -650,18 +543,14 @@
                 const div = document.createElement('div');
                 div.className = 'chat-item';
                 div.innerHTML = `
-                    <div class="chat-avatar" data-userid="${c.id}">${c.avatar}${c.online ? '<span class="online-dot"></span>' : ''}</div>
+                    <div class="chat-avatar">${c.avatar}${c.online ? '<span class="online-dot"></span>' : ''}</div>
                     <div class="chat-info">
-                        <div class="chat-name-row"><span class="chat-name">${c.pinned ? '<i class="fas fa-thumbtack pinned-icon"></i> ' : ''}${esc(c.name)}</span><span class="chat-time">${c.lastTime ? timeAgo(c.lastTime) : ''}</span></div>
-                        <div class="chat-preview"><span class="last-msg">${c.lastMsg ? esc(c.lastMsg.substring(0, 35)) + (c.lastMsg.length > 35 ? '...' : '') : '👋 ابدأ المحادثة'}</span>${c.unread > 0 ? `<span class="unread-badge">${c.unread}</span>` : ''}</div>
+                        <div class="chat-name-row"><span class="chat-name">${esc(c.name)}</span><span class="chat-time">${c.lastTime ? timeAgo(c.lastTime) : ''}</span></div>
+                        <div class="chat-preview"><span class="last-msg">${c.lastMsg || '👋 ابدأ المحادثة'}</span>${c.unread > 0 ? `<span class="unread-badge">${c.unread}</span>` : ''}</div>
                     </div>`;
-                div.addEventListener('click', (e) => {
-                    if (e.target.closest('.chat-avatar')) {
-                        openUserModal({ id: c.id, name: c.name, avatar: c.avatar, bio: 'مستخدم RamzApp' });
-                    } else {
-                        localStorage.setItem('currentChatId', c.id);
-                        window.location.href = 'chat.html';
-                    }
+                div.addEventListener('click', () => {
+                    localStorage.setItem('currentChatId', c.id);
+                    window.location.href = 'chat.html';
                 });
                 container.appendChild(div);
             });
@@ -669,530 +558,198 @@
             container.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>تعذر تحميل المحادثات</p></div>';
         }
     }
+    $('#searchChatsInput').addEventListener('input', (e) => renderChats(e.target.value));
 
-    document.getElementById('searchChatsInput').addEventListener('input', (e) => renderChats(e.target.value));
-    document.getElementById('searchBtn').addEventListener('click', () => {
-        document.getElementById('searchChatsInput').focus();
-        showScreen('chats');
-    });
-
-    // ========== شريط القصص ==========
-    async function renderStoryBar() {
-        const bar = document.getElementById('storyBar');
+    // ==================== شاشة جهات الاتصال ====================
+    async function renderContacts(filter = '') {
+        const container = $('#contactsList');
+        container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text3);">⏳ جاري التحميل...</div>';
         try {
-            currentStoryGroups = await fetchStories();
-            if (currentStoryGroups.length === 0) {
-                bar.style.display = 'none';
-                return;
-            }
-            bar.style.display = 'flex';
-            bar.innerHTML = `
-                <div class="story-item story-add" id="addStoryBtn">
-                    <div class="story-ring"><span>+</span></div>
-                    <div class="story-name">إضافة</div>
-                </div>
-                ${currentStoryGroups.map((g, i) => `
-                    <div class="story-item" data-group="${i}">
-                        <div class="story-ring"><div class="story-avatar">${g.avatar}</div></div>
-                        <div class="story-name">${esc(g.name)}</div>
-                    </div>
-                `).join('')}
-            `;
-            document.getElementById('addStoryBtn').addEventListener('click', () => {
-                document.getElementById('storyFileInput').click();
-            });
-            bar.querySelectorAll('.story-item[data-group]').forEach(item => {
-                item.addEventListener('click', () => {
-                    const groupIdx = parseInt(item.dataset.group);
-                    openStoryViewer(groupIdx);
-                });
-            });
-        } catch (err) {
-            bar.style.display = 'none';
-        }
-    }
-
-    document.getElementById('storyFileInput').addEventListener('change', async (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-        try {
-            toast('⏳ جاري رفع القصة...');
-            await uploadStory(file);
-            toast('✅ تم نشر القصة');
-            renderStoryBar();
-        } catch (err) {
-            toast('❌ فشل رفع القصة');
-        }
-        e.target.value = '';
-    });
-
-    function openStoryViewer(groupIdx) {
-        currentStoryGroupIndex = groupIdx;
-        currentStoryIndex = 0;
-        renderCurrentStory();
-        document.getElementById('storyViewer').classList.add('active');
-        const isOwn = currentStoryGroups[groupIdx].userId === (JSON.parse(localStorage.getItem('ramzapp_user')).id);
-        document.getElementById('deleteStoryBtn').style.display = isOwn ? 'block' : 'none';
-    }
-
-    function closeStoryViewer() {
-        clearInterval(storyInterval);
-        document.getElementById('storyViewer').classList.remove('active');
-        document.getElementById('storyContent').innerHTML = '';
-    }
-
-    document.getElementById('closeStoryViewer').addEventListener('click', closeStoryViewer);
-
-    document.getElementById('deleteStoryBtn').addEventListener('click', async () => {
-        const group = currentStoryGroups[currentStoryGroupIndex];
-        const story = group.stories[currentStoryIndex];
-        if (!story) return;
-        await deleteStory(story.id);
-        toast('🗑 تم حذف القصة');
-        group.stories.splice(currentStoryIndex, 1);
-        if (group.stories.length === 0) {
-            closeStoryViewer();
-            renderStoryBar();
-        } else {
-            currentStoryIndex = Math.min(currentStoryIndex, group.stories.length - 1);
-            renderCurrentStory();
-        }
-    });
-
-    function renderCurrentStory() {
-        clearInterval(storyInterval);
-        const group = currentStoryGroups[currentStoryGroupIndex];
-        if (!group || group.stories.length === 0) {
-            closeStoryViewer();
-            return;
-        }
-
-        const story = group.stories[currentStoryIndex];
-        document.getElementById('storyViewerAvatar').textContent = group.avatar;
-        document.getElementById('storyViewerName').textContent = group.name;
-        document.getElementById('storyViewerTime').textContent = timeAgo(story.createdAt);
-
-        const progressContainer = document.getElementById('storyProgressContainer');
-        progressContainer.innerHTML = group.stories.map((_, i) => `
-            <div class="story-progress-bar">
-                <div class="story-progress-fill" style="width:${i < currentStoryIndex ? '100%' : i === currentStoryIndex ? '0%' : '0%'}"></div>
-            </div>
-        `).join('');
-
-        const content = document.getElementById('storyContent');
-        if (story.type === 'video') {
-            content.innerHTML = `<video src="${story.mediaUrl}" autoplay muted playsinline style="max-width:100%;max-height:80vh;"></video>`;
-            const video = content.querySelector('video');
-            video.onended = nextStory;
-            video.play();
-        } else {
-            content.innerHTML = `<img src="${story.mediaUrl}" alt="قصة">`;
-        }
-
-        const fills = progressContainer.querySelectorAll('.story-progress-fill');
-        const currentFill = fills[currentStoryIndex];
-        let progress = 0;
-        const duration = story.type === 'video' ? 150 : 50;
-        storyInterval = setInterval(() => {
-            progress++;
-            if (currentFill) currentFill.style.width = progress + '%';
-            if (progress >= 100) {
-                clearInterval(storyInterval);
-                nextStory();
-            }
-        }, duration);
-    }
-
-    function nextStory() {
-        const group = currentStoryGroups[currentStoryGroupIndex];
-        if (currentStoryIndex < group.stories.length - 1) {
-            currentStoryIndex++;
-            renderCurrentStory();
-        } else {
-            if (currentStoryGroupIndex < currentStoryGroups.length - 1) {
-                currentStoryGroupIndex++;
-                currentStoryIndex = 0;
-                renderCurrentStory();
-                const isOwn = currentStoryGroups[currentStoryGroupIndex].userId === (JSON.parse(localStorage.getItem('ramzapp_user')).id);
-                document.getElementById('deleteStoryBtn').style.display = isOwn ? 'block' : 'none';
-            } else {
-                closeStoryViewer();
-            }
-        }
-    }
-
-    // ========== شاشة جهات الاتصال ==========
-    async function renderContactsScreen(filter = '') {
-        const container = document.getElementById('contactsListContainer');
-        container.innerHTML = '<p style="text-align:center;color:var(--text3);padding:20px;">⏳ جاري التحميل...</p>';
-        try {
-            const users = await fetchRegisteredUsers();
-            let filtered = users;
+            const user = await getCurrentUser();
+            if (!user) return;
+            const { data: users, error } = await supabase.from('users').select('*').neq('id', user.id);
+            if (error) throw error;
+            let contacts = (users || []).map(u => ({
+                id: u.id, name: u.name || 'مستخدم', avatar: u.avatar || '?', phone: u.phone || '', online: u.is_online
+            }));
             if (filter) {
                 const q = filter.toLowerCase();
-                filtered = users.filter(u => u.name.toLowerCase().includes(q) || u.phone.includes(q));
+                contacts = contacts.filter(c => c.name.toLowerCase().includes(q) || c.phone.includes(q));
             }
-            if (filtered.length === 0) {
-                container.innerHTML = '<div class="empty-state"><i class="fas fa-address-book"></i><p>لا توجد جهات اتصال مسجلة</p></div>';
+            if (contacts.length === 0) {
+                container.innerHTML = '<div class="empty-state"><i class="fas fa-address-book"></i><p>لا توجد جهات اتصال</p></div>';
                 return;
             }
-            container.innerHTML = filtered.map(u => `
-                <div class="channel-item" data-userid="${u.id}" style="justify-content: space-between;">
-                    <div style="display:flex;align-items:center;gap:12px;">
-                        <div class="channel-avatar" style="position:relative;">
-                            ${u.avatar}
-                            ${u.online ? '<span class="online-dot" style="bottom:2px;right:2px;width:13px;height:13px;"></span>' : ''}
-                        </div>
-                        <div class="item-info">
-                            <div class="item-title">${esc(u.name)}</div>
-                            <div class="item-sub">${u.online ? 'متصل الآن' : (u.lastSeen ? 'آخر ظهور ' + timeAgo(u.lastSeen) : '')}</div>
-                        </div>
+            container.innerHTML = '';
+            contacts.forEach(c => {
+                const div = document.createElement('div');
+                div.className = 'chat-item';
+                div.innerHTML = `
+                    <div class="chat-avatar">${c.avatar}${c.online ? '<span class="online-dot"></span>' : ''}</div>
+                    <div class="chat-info">
+                        <div class="chat-name-row"><span class="chat-name">${esc(c.name)}</span></div>
+                        <div class="chat-preview"><span class="last-msg">${c.phone}</span></div>
                     </div>
-                    <button class="promo-btn start-chat-btn" style="padding:6px 16px;font-size:12px;background:var(--accent);color:#fff;border:none;border-radius:20px;cursor:pointer;">💬 دردشة</button>
-                </div>
-            `).join('');
-            document.querySelectorAll('.channel-item').forEach(el => {
-                el.addEventListener('click', (e) => {
-                    if (e.target.closest('.start-chat-btn')) {
-                        e.stopPropagation();
-                        startChatWith(el.dataset.userid);
-                        return;
-                    }
-                    startChatWith(el.dataset.userid);
+                    <button class="header-btn" style="color:var(--accent);"><i class="fas fa-comment-dots"></i></button>`;
+                div.addEventListener('click', () => {
+                    localStorage.setItem('currentChatId', c.id);
+                    window.location.href = 'chat.html';
                 });
+                container.appendChild(div);
             });
         } catch (err) {
             container.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>تعذر تحميل جهات الاتصال</p></div>';
         }
     }
+    $('#searchContactsInput').addEventListener('input', (e) => renderContacts(e.target.value));
 
-    function startChatWith(userId) {
-        localStorage.setItem('currentChatId', userId);
-        window.location.href = 'chat.html';
+    // زر إضافة جهة اتصال الموجود في الهيدر
+    $('#addContactBtn').addEventListener('click', () => {
+        const phone = prompt('📱 أدخل رقم الهاتف:');
+        if (phone) toast('✅ سيتم إضافة الرقم قريباً');
+    });
+
+    // ==================== الزر العائم (FAB) ====================
+    let fabVisible = false;
+    const fabMain = $('#fabMainBtn');
+    const fabOptions = $('#fabOptions');
+
+    function toggleFab() {
+        fabVisible = !fabVisible;
+        if (fabVisible) {
+            fabOptions.classList.add('show');
+        } else {
+            fabOptions.classList.remove('show');
+        }
     }
 
-    document.getElementById('searchContactsInput').addEventListener('keypress', async (e) => {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            const query = document.getElementById('searchContactsInput').value.trim();
-            if (!query) return;
-            const isPhoneLike = /^[\+\d][\d\s\-\(\)]*$/.test(query) && query.replace(/[\s\-\(\)]/g, '').length >= 7;
-            if (isPhoneLike) {
-                toast('🔍 جاري البحث عن الرقم...');
-                const user = await findUserByPhone(query);
-                if (user) {
-                    localStorage.setItem('currentChatId', user.id);
-                    window.location.href = 'chat.html';
-                } else {
-                    toast('❌ هذا الرقم لا يستخدم RamzApp');
-                }
-            } else {
-                renderContactsScreen(query);
-            }
-        }
+    fabMain?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleFab();
     });
-    document.getElementById('searchContactsInput').addEventListener('input', (e) => {
-        const query = e.target.value.trim();
-        const isPhoneLike = /^[\+\d][\d\s\-\(\)]*$/.test(query) && query.replace(/[\s\-\(\)]/g, '').length >= 7;
-        if (!isPhoneLike && query.length > 1) {
-            renderContactsScreen(query);
-        }
-    });
-    document.getElementById('addContactManuallyBtn').addEventListener('click', async () => {
-        const phone = prompt('📱 أدخل رقم الهاتف لإضافته إلى جهات اتصالك:');
-        if (phone && phone.trim()) {
-            const { data } = await supabase.from('users').select('id').eq('phone', phone.trim()).single();
-            if (data) {
-                const user = await getCurrentUser();
-                await supabase.from('contacts').insert({ user_id: user.id, contact_id: data.id });
-                toast('✅ تمت الإضافة');
-                renderContactsScreen();
-            } else {
-                toast('⚠️ هذا الرقم غير مسجل في RamzApp');
-            }
+
+    // إغلاق الفاب عند النقر خارجه
+    document.addEventListener('click', (e) => {
+        if (!fabMain?.contains(e.target) && !fabOptions?.contains(e.target)) {
+            fabOptions?.classList.remove('show');
+            fabVisible = false;
         }
     });
 
-    // ========== شاشة الاستكشاف ==========
-    document.getElementById('searchUsersInput').addEventListener('input', async (e) => {
-        const query = e.target.value.trim();
-        const container = document.getElementById('searchResultsList');
-        if (query.length < 2) {
-            container.innerHTML = '<p style="text-align:center;color:var(--text3);padding:20px;">ابدأ البحث عن أصدقاء جدد</p>';
-            return;
+    // زر إضافة جهة اتصال من الفاب
+    $('#fabAddContact')?.addEventListener('click', async () => {
+        const phone = prompt('📱 أدخل رقم الهاتف (مثال: +967712345678):');
+        if (phone) {
+            // يمكن تطويرها لاحقاً للبحث في قاعدة البيانات
+            toast('✅ جاري البحث عن الرقم...');
+            // هنا يمكنك استدعاء addContactByPhone من common.js إذا أردت
+            // لكن للتوافق نستخدم نفس سلوك addContactBtn
         }
-        container.innerHTML = '<p style="text-align:center;color:var(--text3);padding:20px;">⏳ جاري البحث...</p>';
-        try {
-            const results = await searchUsers(query);
-            if (results.length === 0) {
-                container.innerHTML = '<p style="text-align:center;color:var(--text3);padding:20px;">لا توجد نتائج</p>';
-                return;
-            }
-            container.innerHTML = results.map(u => `
-                <div class="channel-item" style="justify-content:space-between;">
-                    <div class="channel-avatar">${u.avatar}</div>
-                    <div class="item-info"><div class="item-title">${u.name}</div><div class="item-sub">${u.phone || ''}</div></div>
-                    <button class="promo-btn add-friend-btn" data-userid="${u.id}" style="padding:6px 14px;font-size:11px;">➕ إضافة</button>
-                </div>
-            `).join('');
-            document.querySelectorAll('.add-friend-btn').forEach(btn => {
-                btn.addEventListener('click', async (e) => {
-                    e.stopPropagation();
-                    const userId = btn.dataset.userid;
-                    try {
-                        await sendFriendRequest(userId);
-                        btn.textContent = '✓ تم';
-                        btn.disabled = true;
-                        btn.style.background = '#00a884';
-                        toast('✅ تم إرسال طلب الصداقة');
-                    } catch (err) {
-                        toast('⚠️ ' + (err.message === 'طلب موجود مسبقاً' ? 'لقد أرسلت طلباً مسبقاً' : 'فشل الإرسال'));
-                    }
-                });
-            });
-        } catch (err) {
-            container.innerHTML = '<p style="text-align:center;color:var(--text3);padding:20px;">❌ خطأ في البحث</p>';
-        }
+        toggleFab();
     });
 
-    // ========== طلبات الصداقة ==========
-    document.getElementById('requestsMenuBtn').addEventListener('click', async () => {
-        document.getElementById('requestsModal').classList.add('active');
-        loadRequests('received');
+    // تسجيل رقم جديد
+    $('#fabRegisterNumber')?.addEventListener('click', () => {
+        toast('🔧 تسجيل رقم - قريباً');
+        toggleFab();
     });
-    document.getElementById('closeRequestsModalBtn').addEventListener('click', () => {
-        document.getElementById('requestsModal').classList.remove('active');
+
+    // دعوة صديق
+    $('#fabInviteNumber')?.addEventListener('click', async () => {
+        const user = await getCurrentUser();
+        if (user) {
+            const link = `${location.origin}/redirect.html?id=${user.id}`;
+            if (navigator.share) {
+                navigator.share({ title: 'RamzApp', text: link });
+            } else {
+                navigator.clipboard.writeText(link).then(() => toast('📋 تم نسخ رابط الدعوة'));
+            }
+        } else {
+            toast('⚠️ يجب تسجيل الدخول أولاً');
+        }
+        toggleFab();
     });
-    document.querySelectorAll('.requests-tabs .tab').forEach(tab => {
-        tab.addEventListener('click', function() {
-            document.querySelectorAll('.requests-tabs .tab').forEach(t => {
-                t.classList.remove('active');
-                t.style.color = 'var(--text3)';
-                t.style.borderBottom = '2px solid transparent';
+
+    // إضافة إلى مجموعة
+    $('#fabAddToGroup')?.addEventListener('click', () => {
+        toast('👥 إضافة لمجموعة - قريباً');
+        toggleFab();
+    });
+
+    // ==================== شاشة المكالمات ====================
+    function renderCalls() {
+        $('#callsList').innerHTML = '<div class="empty-state"><i class="fas fa-phone-slash"></i><p>لا توجد مكالمات بعد</p></div>';
+    }
+
+    // ==================== شاشة التحديثات ====================
+    function renderStories() {
+        const bar = $('#storyBar');
+        if (!bar) return;
+        bar.innerHTML = '<div class="story-item story-add"><div class="story-ring"><span>+</span></div><div class="story-name">إضافة</div></div>';
+    }
+    function renderChannels() {
+        const container = $('#channelsList');
+        if (container) container.innerHTML = '<div class="empty-state"><p>لا توجد قنوات بعد</p></div>';
+    }
+
+    // ==================== شاشة الأدوات ====================
+    function updateStats() {
+        const $sv = $('#statViews');
+        const $sc = $('#statCatalog');
+        const $sch = $('#statChats');
+        if ($sv) $sv.textContent = Math.floor(Math.random() * 200);
+        if ($sc) $sc.textContent = Math.floor(Math.random() * 50);
+        if ($sch) $sch.textContent = Math.floor(Math.random() * 15);
+    }
+    $('#startAdBtn')?.addEventListener('click', () => toast('🚀 إعلان قريباً'));
+    $('#catalogBtn')?.addEventListener('click', () => toast('📦 الكتالوج'));
+    $('#broadcastBtn')?.addEventListener('click', () => {
+        const msg = prompt('📣 اكتب الرسالة الجماعية:');
+        if (msg) toast('📣 تم الإرسال');
+    });
+
+    // ==================== نافذة المستخدم ====================
+    $('#closeModalBtn')?.addEventListener('click', () => $('#userModal').classList.remove('active'));
+    $('#userModal')?.addEventListener('click', (e) => { if (e.target === $('#userModal')) $('#userModal').classList.remove('active'); });
+
+    // ==================== القائمة المنبثقة ====================
+    $('#mainMenuBtn')?.addEventListener('click', () => {
+        const menu = $('#popupMenu');
+        menu.innerHTML = `
+            <div class="popup-item" data-action="settings"><i class="fas fa-cog"></i> الإعدادات</div>
+            <div class="popup-item" data-action="contacts"><i class="fas fa-address-book"></i> جهات الاتصال</div>
+            <div class="popup-item danger" data-action="logout"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</div>
+        `;
+        $('#popupOverlay').classList.add('active');
+        menu.querySelectorAll('.popup-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const action = item.dataset.action;
+                $('#popupOverlay').classList.remove('active');
+                if (action === 'settings') showScreen('settings');
+                if (action === 'contacts') showScreen('contacts');
+                if (action === 'logout') { localStorage.removeItem('ramzapp_user'); window.location.href = 'login.html'; }
             });
-            this.classList.add('active');
-            this.style.color = 'var(--accent)';
-            this.style.borderBottom = '2px solid var(--accent)';
-            loadRequests(this.dataset.tab);
         });
     });
+    $('#popupOverlay')?.addEventListener('click', (e) => { if (e.target === $('#popupOverlay')) $('#popupOverlay').classList.remove('active'); });
 
-    async function loadRequests(type) {
-        const container = document.getElementById('requestsContent');
-        container.innerHTML = '<p style="text-align:center;color:var(--text3);padding:20px;">⏳ جاري التحميل...</p>';
-        try {
-            if (type === 'received') {
-                const requests = await getPendingReceivedRequests();
-                if (requests.length === 0) {
-                    container.innerHTML = '<p style="text-align:center;color:var(--text3);padding:20px;">لا توجد طلبات واردة</p>';
-                    return;
-                }
-                container.innerHTML = requests.map(r => `
-                    <div class="channel-item" style="justify-content:space-between;">
-                        <div class="channel-avatar">${r.sender.avatar}</div>
-                        <div class="item-info"><div class="item-title">${r.sender.name}</div></div>
-                        <div>
-                            <button class="promo-btn accept-btn" data-reqid="${r.id}" style="padding:4px 10px;font-size:10px;background:#00a884;margin:2px;">✅ قبول</button>
-                            <button class="promo-btn reject-btn" data-reqid="${r.id}" style="padding:4px 10px;font-size:10px;background:#ff4444;margin:2px;">❌ رفض</button>
-                        </div>
-                    </div>
-                `).join('');
-                document.querySelectorAll('.accept-btn').forEach(b => b.addEventListener('click', async () => {
-                    await acceptFriendRequest(b.dataset.reqid);
-                    toast('✅ تم قبول الصديق');
-                    loadRequests('received');
-                    updateRequestsBadge();
-                }));
-                document.querySelectorAll('.reject-btn').forEach(b => b.addEventListener('click', async () => {
-                    await rejectFriendRequest(b.dataset.reqid);
-                    toast('❌ تم الرفض');
-                    loadRequests('received');
-                    updateRequestsBadge();
-                }));
-            } else {
-                const requests = await getPendingSentRequests();
-                if (requests.length === 0) {
-                    container.innerHTML = '<p style="text-align:center;color:var(--text3);padding:20px;">لا توجد طلبات صادرة معلقة</p>';
-                    return;
-                }
-                container.innerHTML = requests.map(r => `
-                    <div class="channel-item">
-                        <div class="channel-avatar">${r.receiver.avatar}</div>
-                        <div class="item-info"><div class="item-title">${r.receiver.name}</div><div class="item-sub">بانتظار الرد...</div></div>
-                    </div>
-                `).join('');
-            }
-        } catch (err) {
-            container.innerHTML = '<p style="text-align:center;color:var(--text3);padding:20px;">❌ خطأ في التحميل</p>';
-        }
-    }
-
-    async function updateRequestsBadge() {
-        try {
-            const requests = await getPendingReceivedRequests();
-            const badge = document.getElementById('requestsBadge');
-            if (requests.length > 0) {
-                badge.textContent = requests.length;
-                badge.style.display = 'flex';
-            } else {
-                badge.style.display = 'none';
-            }
-        } catch (e) {}
-    }
-
-    // ========== شاشة المكالمات ==========
-    function renderCallsScreen() {
-        document.getElementById('callsList').innerHTML = `
-            <div class="empty-state"><i class="fas fa-phone-slash"></i><p>لا توجد مكالمات بعد</p></div>
-            <div class="call-item"><div class="call-avatar">م</div><div class="item-info"><div class="item-title">محمد</div><div class="item-sub">📤 صادرة • 10:30</div></div><i class="fas fa-phone" style="color:var(--accent);"></i></div>`;
-    }
-
-    // ========== شاشة التحديثات ==========
-    function renderUpdatesScreen() {
-        document.getElementById('channelsList').innerHTML = `
-            <div class="channel-item"><div class="channel-avatar">📰</div><div class="item-info"><div class="item-title">أخبار التقنية</div><div class="item-sub">1240 متابع</div></div></div>
-            <div class="channel-item"><div class="channel-avatar">⚽</div><div class="item-info"><div class="item-title">رياضة اليوم</div><div class="item-sub">892 متابع</div></div></div>`;
-    }
-
-    // ========== شاشة الأدوات ==========
-    function updateStats() {
-        document.getElementById('statViews').textContent = Math.floor(Math.random() * 200);
-        document.getElementById('statCatalog').textContent = Math.floor(Math.random() * 50);
-        document.getElementById('statChats').textContent = Math.floor(Math.random() * 15);
-    }
-    document.getElementById('startAdBtn').addEventListener('click', () => toast('🚀 إعلان قريباً'));
-    document.getElementById('catalogBtn').addEventListener('click', () => toast('📦 الكتالوج'));
-    document.getElementById('broadcastBtn').addEventListener('click', () => toast('📣 رسائل جماعية'));
-
-    // ========== الإعدادات ==========
-    document.getElementById('themeToggle').addEventListener('click', () => {
-        localSettings.theme = localSettings.theme === 'dark' ? 'light' : 'dark';
-        saveSettings();
-        applyTheme();
-        document.getElementById('themeSwitch').classList.toggle('active', localSettings.theme === 'dark');
-        toast(localSettings.theme === 'dark' ? '🌙 الوضع الليلي' : '☀️ الوضع النهاري');
-    });
-    document.getElementById('notifToggle').addEventListener('click', () => {
-        localSettings.notifications = !localSettings.notifications;
-        saveSettings();
-        document.getElementById('notifSwitch').classList.toggle('active', localSettings.notifications);
-        toast(localSettings.notifications ? '🔔 الإشعارات مفعلة' : '🔕 الإشعارات معطلة');
+    // ==================== الإعدادات ====================
+    $('#themeToggle')?.addEventListener('click', toggleTheme);
+    $('#notifToggle')?.addEventListener('click', function() {
+        const ns = $('#notifSwitch');
+        const isActive = !ns.classList.contains('active');
+        ns.classList.toggle('active', isActive);
+        localStorage.setItem('ramzapp_notifications', isActive);
+        toast(isActive ? '🔔 الإشعارات مفعلة' : '🔕 الإشعارات معطلة');
     });
 
-    window.exportData = () => {
-        const backup = { settings: localSettings, user: JSON.parse(localStorage.getItem('ramzapp_user') || '{}') };
-        const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = 'ramzapp_backup.json';
-        a.click();
-        toast('💾 تم التصدير');
-    };
-    window.importData = () => {
-        const input = document.createElement('input');
-        input.type = 'file'; input.accept = '.json';
-        input.onchange = (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = (ev) => {
-                try {
-                    const data = JSON.parse(ev.target.result);
-                    if (data.settings) localStorage.setItem('ramzapp_settings', JSON.stringify(data.settings));
-                    if (data.user) localStorage.setItem('ramzapp_user', JSON.stringify(data.user));
-                    toast('✅ تم الاستيراد'); location.reload();
-                } catch { toast('❌ ملف غير صالح'); }
-            };
-            reader.readAsText(file);
-        };
-        input.click();
-    };
-    window.clearAllData = () => {
-        if (confirm('⚠️ حذف جميع المحادثات والبيانات المحلية؟')) {
-            localStorage.removeItem('ramzapp_user');
-            localStorage.removeItem('ramzapp_settings');
-            window.location.href = 'login.html';
-        }
-    };
-
-    window.deleteAccount = async function() {
-        const confirm1 = confirm('⚠️ تحذير: حذف الحساب لا يمكن التراجع عنه. ستفقد جميع محادثاتك، صورك، جهات اتصالك، وإعداداتك نهائياً.');
-        if (!confirm1) return;
-        const confirm2 = confirm('هل أنت متأكد تماماً؟ هذه آخر فرصة للتراجع.');
-        if (!confirm2) return;
-        const confirm3 = prompt('اكتب "حذف حسابي" لتأكيد حذف الحساب:');
-        if (confirm3 !== 'حذف حسابي') {
-            toast('تم الإلغاء');
-            return;
-        }
-        if (!confirm('الفرصة الأخيرة: اضغط موافق للحذف النهائي')) return;
-        try {
-            await deleteUserAccount();
-            toast('🗑 تم حذف الحساب بنجاح');
-            setTimeout(() => { window.location.href = 'login.html'; }, 1500);
-        } catch (err) {
-            toast('❌ فشل حذف الحساب: ' + err.message);
-        }
-    };
-
-    window.logout = async () => {
-        await setOnlineStatus(false);
-        localStorage.removeItem('ramzapp_user');
-        window.location.href = 'login.html';
-    };
-
-    // ========== نافذة المستخدم ==========
-    function openUserModal(user) {
-        selectedModalUser = user;
-        document.getElementById('modalAvatar').textContent = user.avatar || '?';
-        document.getElementById('modalName').textContent = user.name || 'مستخدم';
-        document.getElementById('modalBio').textContent = user.bio || 'مرحباً! أنا في RamzApp 💬';
-        document.getElementById('userModal').classList.add('active');
-    }
-    document.getElementById('closeModalBtn').addEventListener('click', () => document.getElementById('userModal').classList.remove('active'));
-    document.getElementById('userModal').addEventListener('click', (e) => {
-        if (e.target === document.getElementById('userModal')) document.getElementById('userModal').classList.remove('active');
-    });
-    document.getElementById('modalChatBtn').addEventListener('click', () => {
-        if (selectedModalUser) {
-            localStorage.setItem('currentChatId', selectedModalUser.id);
-            window.location.href = 'chat.html';
-        }
-        document.getElementById('userModal').classList.remove('active');
-    });
-    document.getElementById('modalCallBtn').addEventListener('click', () => { toast('📞 جاري الاتصال...'); document.getElementById('userModal').classList.remove('active'); });
-    document.getElementById('modalVideoBtn').addEventListener('click', () => { toast('📹 مكالمة فيديو...'); document.getElementById('userModal').classList.remove('active'); });
-    document.getElementById('modalInfoBtn').addEventListener('click', () => {
-        if (selectedModalUser) toast('ℹ️ ' + selectedModalUser.name);
-        document.getElementById('userModal').classList.remove('active');
-    });
-
-    // ========== عارض الصور ==========
-    document.getElementById('closeImageViewer').addEventListener('click', () => document.getElementById('imageViewer').classList.remove('active'));
-    document.getElementById('imageViewer').addEventListener('click', function(e) { if (e.target === this) this.classList.remove('active'); });
-
-    // ========== قائمة الخيارات الرئيسية ==========
-    document.getElementById('mainMenuBtn').addEventListener('click', (e) => {
-        e.stopPropagation();
-        const items = [
-            { icon: 'fa-users', label: 'مجموعة جديدة', action: () => createGroup() },
-            { icon: 'fa-archive', label: 'المؤرشفة', action: () => toast('📦 المؤرشفة') },
-            { icon: 'fa-star', label: 'المميزة بنجمة', action: () => toast('⭐ المميزة') },
-            { icon: 'fa-cog', label: 'الإعدادات', action: () => showScreen('settings') },
-            { icon: 'fa-sign-out-alt', label: 'تسجيل الخروج', action: () => window.logout(), danger: true }
-        ];
-        showPopupMenu(items, document.getElementById('mainMenuBtn'));
-    });
-
-    function createGroup() {
-        const name = prompt('اسم المجموعة:');
-        if (name && name.trim()) {
-            toast('✅ تم إنشاء المجموعة');
-        }
-    }
-
-    // ========== انطلاق ==========
-    init();
+    // ==================== بدء التشغيل ====================
+    (async () => {
+        const user = await getCurrentUser();
+        if (!user) return;
+        await renderChats();
+        setInterval(() => { if (currentScreen === 'chats') renderChats(); }, 15000);
+    })();
 </script>
 </body>
 </html>

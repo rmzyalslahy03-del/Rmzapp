@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>RamzApp - تسجيل الدخول</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0d0d0d; --surface: #1a1a1a; --surface2: #222; --text: #fff; --text3: #999;
+            --border: #2c2c2c; --accent: #ff0050; --accent2: #ff6b8a;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: var(--bg); font-family: 'Cairo', sans-serif; height: 100vh;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; color: var(--text);
+            animation: fadeIn 0.6s ease;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .logo {
+            font-size: 58px; font-weight: 900;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .form-container {
+            display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 320px;
+        }
+        .tab-row {
+            display: flex; border-radius: 25px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 8px;
+        }
+        .tab-btn {
+            flex: 1; padding: 12px; border: none; background: var(--surface2); color: var(--text3); font-family: inherit;
+            font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s;
+        }
+        .tab-btn.active { background: var(--accent); color: #fff; }
+        .login-input {
+            width: 100%; padding: 15px 20px; border-radius: 30px; border: 2px solid var(--border);
+            background: var(--surface2); color: var(--text); font-family: inherit; font-size: 16px; text-align: center;
+            outline: none; transition: all 0.2s;
+        }
+        .login-input:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(255,0,80,0.1); }
+        .phone-row {
+            display: flex; gap: 8px;
+        }
+        .phone-row select {
+            width: 130px; padding: 15px 10px; border-radius: 30px; border: 2px solid var(--border);
+            background: var(--surface2); color: var(--text); font-family: inherit; font-size: 14px; text-align: center;
+            outline: none; appearance: none; cursor: pointer;
+        }
+        .phone-row input {
+            flex: 1;
+        }
+        .login-btn {
+            width: 100%; padding: 15px; border-radius: 30px; border: none;
+            background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff;
+            font-family: inherit; font-size: 17px; font-weight: 700; cursor: pointer; transition: all 0.2s;
+        }
+        .guest-btn { background: transparent !important; border: 2px solid var(--accent) !important; color: var(--accent) !important; }
+        .hint { color: var(--text3); font-size: 11px; text-align: center; }
+        .error { color: #ff4444; font-size: 13px; text-align: center; min-height: 20px; }
+        .loading-spinner {
+            display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%; border-top-color: #fff; animation: spin 0.8s linear infinite; margin-right: 8px;
+            vertical-align: middle;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .btn:disabled { opacity: 0.6; pointer-events: none; }
+    </style>
+</head>
+<body>
+    <div class="logo">💬 RamzApp</div>
+    <div class="form-container">
+        <!-- تبويبات -->
+        <div class="tab-row">
+            <button class="tab-btn active" id="tabEmail">📧 البريد الإلكتروني</button>
+            <button class="tab-btn" id="tabPhone">📱 رقم الهاتف</button>
+        </div>
+
+        <!-- نموذج البريد الإلكتروني -->
+        <div id="emailForm">
+            <input type="email" class="login-input" id="emailInput" placeholder="البريد الإلكتروني" autocomplete="email" dir="ltr">
+            <input type="password" class="login-input" id="passwordInput" placeholder="كلمة المرور" autocomplete="current-password" dir="ltr">
+            <div class="error" id="emailError"></div>
+            <button class="login-btn" id="emailLoginBtn"><span id="emailBtnText">🚀 دخول</span></button>
+        </div>
+
+        <!-- نموذج الهاتف -->
+        <div id="phoneForm" style="display:none;">
+            <div class="phone-row">
+                <select id="countryCode">
+                    <option value="+967">🇾🇪 +967</option>
+                    <option value="+966">🇸🇦 +966</option>
+                    <option value="+971">🇦🇪 +971</option>
+                    <option value="+968">🇴🇲 +968</option>
+                    <option value="+974">🇶🇦 +974</option>
+                    <option value="+973">🇧🇭 +973</option>
+                    <option value="+965">🇰🇼 +965</option>
+                    <option value="+962">🇯🇴 +962</option>
+                    <option value="+961">🇱🇧 +961</option>
+                    <option value="+20">🇪🇬 +20</option>
+                    <option value="+1">🇺🇸 +1</option>
+                    <option value="+44">🇬🇧 +44</option>
+                    <option value="+33">🇫🇷 +33</option>
+                    <option value="+49">🇩🇪 +49</option>
+                </select>
+                <input type="tel" class="login-input" id="phoneInput" placeholder="رقم الهاتف" dir="ltr">
+            </div>
+            <div class="error" id="phoneError"></div>
+            <button class="login-btn" id="phoneLoginBtn"><span id="phoneBtnText">📱 متابعة</span></button>
+        </div>
+
+        <button class="login-btn guest-btn" id="guestBtn"><span id="guestBtnText">👤 الدخول كضيف</span></button>
+        <p class="hint">سيتم حفظ حسابك محلياً وستدخل تلقائياً في كل مرة</p>
+    </div>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+        // ========== تكوين Supabase ==========
+        const SUPABASE_URL = 'https://serlegwdzjulfcxabxzv.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_4_c97KxnG_7HTvfv-pKeNQ_FTlnK6Yx';
+        const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // ========== دوال مساعدة ==========
+        function showError(elementId, message) {
+            const el = document.getElementById(elementId);
+            el.textContent = message;
+            setTimeout(() => { el.textContent = ''; }, 5000);
+        }
+
+        function setLoading(buttonId, textId, isLoading, originalText) {
+            const btn = document.getElementById(buttonId);
+            const textEl = document.getElementById(textId);
+            if (isLoading) {
+                btn.disabled = true;
+                textEl.innerHTML = `<span class="loading-spinner"></span> ${originalText}`;
+            } else {
+                btn.disabled = false;
+                textEl.textContent = originalText;
+            }
+        }
+
+        function toast(message, duration = 2000) {
+            const existing = document.querySelector('.global-toast');
+            if (existing) existing.remove();
+            const el = document.createElement('div');
+            el.className = 'global-toast';
+            el.style.cssText = `
+                position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
+                background: #333; color: #fff; padding: 10px 20px; border-radius: 25px;
+                font-size: 13px; z-index: 9999; opacity: 0; transition: opacity 0.3s;
+                pointer-events: none; white-space: nowrap; font-family: 'Cairo';
+            `;
+            el.textContent = message;
+            document.body.appendChild(el);
+            requestAnimationFrame(() => el.style.opacity = '1');
+            setTimeout(() => {
+                el.style.opacity = '0';
+                setTimeout(() => el.remove(), 300);
+            }, duration);
+        }
+
+        // ========== تبديل التبويبات ==========
+        const tabEmail = document.getElementById('tabEmail');
+        const tabPhone = document.getElementById('tabPhone');
+        const emailForm = document.getElementById('emailForm');
+        const phoneForm = document.getElementById('phoneForm');
+
+        tabEmail.addEventListener('click', () => {
+            tabEmail.classList.add('active');
+            tabPhone.classList.remove('active');
+            emailForm.style.display = 'block';
+            phoneForm.style.display = 'none';
+        });
+
+        tabPhone.addEventListener('click', () => {
+            tabPhone.classList.add('active');
+            tabEmail.classList.remove('active');
+            emailForm.style.display = 'none';
+            phoneForm.style.display = 'block';
+        });
+
+        // ========== تسجيل الدخول بالبريد ==========
+        document.getElementById('emailLoginBtn').addEventListener('click', async () => {
+            const email = document.getElementById('emailInput').value.trim();
+            const password = document.getElementById('passwordInput').value;
+            
+            if (!email || !password) {
+                showError('emailError', 'يرجى إدخال البريد وكلمة المرور');
+                return;
+            }
+            
+            setLoading('emailLoginBtn', 'emailBtnText', true, 'جاري الدخول...');
+            
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+                
+                if (error) {
+                    showError('emailError', 'خطأ في البريد أو كلمة المرور');
+                    setLoading('emailLoginBtn', 'emailBtnText', false, '🚀 دخول');
+                    return;
+                }
+                
+                const user = data.user;
+                
+                // جلب الملف الشخصي من جدول users العام
+                const { data: profile } = await supabase
+                    .from('users')
+                    .select('*')
+                    .eq('id', user.id)
+                    .single();
+                
+                const userData = {
+                    id: user.id,
+                    email: user.email,
+                    name: profile?.name || 'مستخدم',
+                    avatar: profile?.avatar || '👤',
+                    phone: profile?.phone || ''
+                };
+                
+                localStorage.setItem('ramzapp_user', JSON.stringify(userData));
+                
+                // تحديث حالة الاتصال
+                await supabase.from('users').update({
+                    is_online: true,
+                    last_seen: new Date().toISOString()
+                }).eq('id', user.id);
+                
+                // تحقق من رابط عميق
+                const deepLink = localStorage.getItem('ramzapp_deep_link_target');
+                if (deepLink) {
+                    localStorage.removeItem('ramzapp_deep_link_target');
+                    localStorage.setItem('currentChatId', deepLink);
+                    window.location.href = 'chat.html';
+                } else {
+                    window.location.href = 'chats.html';
+                }
+                
+            } catch (err) {
+                showError('emailError', 'حدث خطأ أثناء الاتصال');
+                setLoading('emailLoginBtn', 'emailBtnText', false, '🚀 دخول');
+            }
+        });
+
+        // ========== تسجيل الدخول / التسجيل بالهاتف ==========
+        document.getElementById('phoneLoginBtn').addEventListener('click', async () => {
+            const countryCode = document.getElementById('countryCode').value;
+            let phone = document.getElementById('phoneInput').value.trim().replace(/[\s\-\(\)]/g, '');
+            
+            if (!phone) {
+                showError('phoneError', 'يرجى إدخال رقم الهاتف');
+                return;
+            }
+            
+            if (phone.startsWith('0')) phone = phone.substring(1);
+            const fullPhone = countryCode + phone;
+            
+            setLoading('phoneLoginBtn', 'phoneBtnText', true, 'جاري التحقق...');
+            
+            try {
+                // البحث عن مستخدم بهذا الرقم
+                const { data: existingUsers } = await supabase
+                    .from('users')
+                    .select('*')
+                    .eq('phone', fullPhone)
+                    .limit(1);
+                
+                let user;
+                let isNewUser = false;
+                
+                if (existingUsers && existingUsers.length > 0) {
+                    // مستخدم موجود – تسجيل الدخول
+                    user = existingUsers[0];
+                } else {
+                    // مستخدم جديد – إنشاء حساب
+                    const tempName = 'مستخدم_' + fullPhone.slice(-4);
+                    const { data: newUser, error } = await supabase
+                        .from('users')
+                        .insert({
+                            name: tempName,
+                            phone: fullPhone,
+                            avatar: tempName.charAt(0)
+                        })
+                        .select()
+                        .single();
+                    
+                    if (error) throw error;
+                    user = newUser;
+                    isNewUser = true;
+                }
+                
+                // حفظ بيانات المستخدم
+                const userData = {
+                    id: user.id,
+                    email: '',
+                    name: user.name,
+                    avatar: user.avatar,
+                    phone: user.phone || ''
+                };
+                
+                localStorage.setItem('ramzapp_user', JSON.stringify(userData));
+                
+                // تحديث حالة الاتصال
+                await supabase.from('users').update({
+                    is_online: true,
+                    last_seen: new Date().toISOString()
+                }).eq('id', user.id);
+                
+                if (isNewUser) {
+                    toast('✅ تم إنشاء حساب جديد برقمك');
+                } else {
+                    toast('👋 مرحباً بعودتك!');
+                }
+                
+                setTimeout(() => {
+                    const deepLink = localStorage.getItem('ramzapp_deep_link_target');
+                    if (deepLink) {
+                        localStorage.removeItem('ramzapp_deep_link_target');
+                        localStorage.setItem('currentChatId', deepLink);
+                        window.location.href = 'chat.html';
+                    } else {
+                        window.location.href = 'chats.html';
+                    }
+                }, 800);
+                
+            } catch (err) {
+                console.error(err);
+                showError('phoneError', 'فشل تسجيل الدخول');
+                setLoading('phoneLoginBtn', 'phoneBtnText', false, '📱 متابعة');
+            }
+        });
+
+        // ========== الدخول كضيف ==========
+        document.getElementById('guestBtn').addEventListener('click', async () => {
+            setLoading('guestBtn', 'guestBtnText', true, 'جاري إنشاء حساب...');
+            
+            try {
+                const guestId = Date.now().toString(36) + Math.random().toString(36).substring(2, 5);
+                const guestEmail = `guest_${guestId}@ramzapp-mail.com`;
+                const guestPassword = 'Guest@' + guestId;
+                
+                const { data, error } = await supabase.auth.signUp({
+                    email: guestEmail,
+                    password: guestPassword,
+                    options: { data: { name: 'زائر' } }
+                });
+                
+                if (error) {
+                    if (error.message.includes('already exists')) {
+                        // محاولة تسجيل الدخول مباشرة
+                        const { data: signInData } = await supabase.auth.signInWithPassword({
+                            email: guestEmail,
+                            password: guestPassword
+                        });
+                        if (signInData?.user) {
+                            await finalizeGuestLogin(signInData.user);
+                            return;
+                        }
+                    }
+                    throw error;
+                }
+                
+                const user = data.user;
+                if (user) {
+                    // التأكد من وجود صف في جدول users
+                    const { data: existing } = await supabase
+                        .from('users')
+                        .select('id')
+                        .eq('id', user.id)
+                        .maybeSingle();
+                    
+                    if (!existing) {
+                        await supabase.from('users').insert({
+                            id: user.id,
+                            name: 'زائر',
+                            avatar: '👤',
+                            is_online: true,
+                            last_seen: new Date().toISOString()
+                        });
+                    }
+                    
+                    await finalizeGuestLogin(user);
+                }
+                
+            } catch (err) {
+                console.error(err);
+                toast('❌ فشل إنشاء حساب الضيف');
+                setLoading('guestBtn', 'guestBtnText', false, '👤 الدخول كضيف');
+            }
+        });
+
+        async function finalizeGuestLogin(user) {
+            const userData = {
+                id: user.id,
+                email: user.email,
+                name: 'زائر',
+                avatar: '👤',
+                phone: ''
+            };
+            localStorage.setItem('ramzapp_user', JSON.stringify(userData));
+            
+            const deepLink = localStorage.getItem('ramzapp_deep_link_target');
+            if (deepLink) {
+                localStorage.removeItem('ramzapp_deep_link_target');
+                localStorage.setItem('currentChatId', deepLink);
+                window.location.href = 'chat.html';
+            } else {
+                window.location.href = 'chats.html';
+            }
+        }
+
+        // ========== التحقق من جلسة سابقة ==========
+        (async () => {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session?.user) {
+                const deepLink = localStorage.getItem('ramzapp_deep_link_target');
+                if (deepLink) {
+                    localStorage.removeItem('ramzapp_deep_link_target');
+                    localStorage.setItem('currentChatId', deepLink);
+                    window.location.href = 'chat.html';
+                } else {
+                    window.location.href = 'chats.html';
+                }
+            }
+        })();
+    </script>
+</body>
+</html>

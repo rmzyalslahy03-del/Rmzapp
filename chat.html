@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>RamzApp | محادثة</title>
-    <script src="https://cdn.jsdelivr.net/npm/simple-peer@9.11.1/simplepeer.min.js"></script>
+    <title>RamzApp | محادثة + صور + صوت</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -26,7 +25,7 @@
             gap: 12px;
             border-bottom: 1px solid #2c2c2c;
         }
-        .back-btn, .call-btn {
+        .back-btn {
             background: none;
             border: none;
             color: white;
@@ -39,7 +38,7 @@
             align-items: center;
             justify-content: center;
         }
-        .back-btn:hover, .call-btn:hover { background: #2a2a2a; }
+        .back-btn:hover { background: #2a2a2a; }
         .avatar {
             width: 40px;
             height: 40px;
@@ -61,7 +60,6 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
-            background: #0d0d0d;
         }
         .msg-row { display: flex; width: 100%; }
         .msg-row.own { justify-content: flex-end; }
@@ -81,6 +79,20 @@
             background: #1a1a1a;
             border: 1px solid #2c2c2c;
             border-bottom-left-radius: 4px;
+        }
+        .msg-image {
+            max-width: 200px;
+            max-height: 200px;
+            border-radius: 12px;
+            margin-bottom: 6px;
+            cursor: pointer;
+            display: block;
+        }
+        audio {
+            max-width: 200px;
+            height: 32px;
+            border-radius: 20px;
+            margin-top: 4px;
         }
         .msg-time {
             font-size: 10px;
@@ -105,7 +117,7 @@
             font-family: inherit;
             outline: none;
         }
-        .send-btn, .attach-btn, .mic-btn {
+        .input-btn {
             background: #2a2a2a;
             border: none;
             color: #ff0050;
@@ -117,77 +129,18 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: 0.1s;
         }
         .send-btn { background: #ff0050; color: white; }
-        /* مودالات المكالمات - تظهر فقط عند الحاجة */
-        .incoming-call-modal, .ongoing-call-modal {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.95);
-            backdrop-filter: blur(12px);
-            z-index: 10000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            gap: 20px;
-        }
-        .incoming-call-modal.show, .ongoing-call-modal.show {
-            display: flex;
-        }
-        .caller-avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: #ff0050;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-        }
-        .caller-name {
-            font-size: 20px;
-            font-weight: 600;
-            margin-top: 8px;
-        }
-        .call-actions {
-            display: flex;
-            gap: 40px;
-            margin-top: 20px;
-        }
-        .call-action-btn {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
+        .mic-btn.recording {
             background: #ff4d4d;
-            border: none;
             color: white;
-            font-size: 28px;
-            cursor: pointer;
+            animation: pulse 0.8s infinite;
         }
-        .call-action-btn.answer { background: #25D366; }
-        .call-timer { font-size: 32px; font-family: monospace; }
-        /* فيديو المكالمات - مخفي بشكل افتراضي */
-        #localVideo, #remoteVideo {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 120px;
-            height: 160px;
-            border-radius: 12px;
-            background: #000;
-            z-index: 10001;
-            object-fit: cover;
-            display: none;
-        }
-        #remoteVideo {
-            bottom: auto;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 0;
-            z-index: 10000;
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
         }
         .global-toast {
             position: fixed;
@@ -205,6 +158,25 @@
             pointer-events: none;
             white-space: nowrap;
         }
+        .image-viewer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.95);
+            z-index: 20000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .image-viewer.active { display: flex; }
+        .image-viewer img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
     </style>
 </head>
 <body>
@@ -215,8 +187,6 @@
             <div class="chat-name" id="chatName">...</div>
             <div class="chat-status" id="chatStatus">...</div>
         </div>
-        <button class="call-btn" id="voiceCallBtn"><i class="fas fa-phone-alt"></i></button>
-        <button class="call-btn" id="videoCallBtn"><i class="fas fa-video"></i></button>
     </div>
 
     <div class="messages-area" id="messagesArea">
@@ -224,38 +194,19 @@
     </div>
 
     <div class="input-bar">
-        <button class="attach-btn" id="attachBtn"><i class="fas fa-paperclip"></i></button>
+        <button class="input-btn" id="attachBtn"><i class="fas fa-paperclip"></i></button>
+        <button class="input-btn mic-btn" id="micBtn"><i class="fas fa-microphone"></i></button>
         <input type="text" id="msgInput" placeholder="اكتب رسالة...">
-        <button class="send-btn" id="sendBtn"><i class="fas fa-paper-plane"></i></button>
-        <button class="mic-btn" id="micBtn"><i class="fas fa-microphone"></i></button>
+        <button class="input-btn send-btn" id="sendBtn"><i class="fas fa-paper-plane"></i></button>
     </div>
     <input type="file" id="fileInput" style="display:none" accept="image/*">
 
-    <!-- مودالات المكالمات -->
-    <div class="incoming-call-modal" id="incomingCallModal">
-        <div class="caller-avatar" id="callerAvatar">?</div>
-        <div class="caller-name" id="callerName">...</div>
-        <div class="call-actions">
-            <button class="call-action-btn" id="rejectCallBtn"><i class="fas fa-phone-slash"></i></button>
-            <button class="call-action-btn answer" id="answerCallBtn"><i class="fas fa-phone-alt"></i></button>
-        </div>
+    <div class="image-viewer" id="imageViewer" onclick="this.classList.remove('active')">
+        <img id="viewerImg" src="">
     </div>
-    <div class="ongoing-call-modal" id="ongoingCallModal">
-        <div class="caller-avatar" id="ongoingCallerAvatar">?</div>
-        <div class="caller-name" id="ongoingCallerName">...</div>
-        <div class="call-timer" id="callTimer">00:00</div>
-        <div class="call-actions">
-            <button class="call-action-btn" id="endCallBtn"><i class="fas fa-phone-slash"></i></button>
-            <button class="call-action-btn" id="toggleVideoBtn" style="background:#34b7f1;"><i class="fas fa-video"></i></button>
-        </div>
-    </div>
-    <video id="localVideo" autoplay muted playsinline></video>
-    <video id="remoteVideo" autoplay playsinline></video>
 
     <script type="module">
         import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
-        import { initDatabase, insertMessage, getMessages, updateMessageLocalStatus, getPendingMessages } from './db.js';
-        import { getCurrentUser, sendMessage as sendMsgCloud, uploadImage, toast, timeAgo, fmtTime, fmtDate, esc, subscribeToMessages, sendTypingEvent, onTypingEvent } from './common.js';
 
         const SUPABASE_URL = 'https://serlegwdzjulfcxabxzv.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_4_c97KxnG_7HTvfv-pKeNQ_FTlnK6Yx';
@@ -264,295 +215,212 @@
         const chatId = localStorage.getItem('currentChatId');
         if (!chatId) window.location.href = 'chats.html';
 
-        let currentUser = await getCurrentUser();
-        if (!currentUser) window.location.href = 'login.html';
-        await initDatabase();
-
+        const userStr = localStorage.getItem('ramzapp_user');
+        if (!userStr) window.location.href = 'login.html';
+        const currentUser = JSON.parse(userStr);
+        
         let chatUser = null;
-        let pendingImg = null;
+        let isUploading = false;
+
+        // التسجيل الصوتي
         let mediaRecorder = null;
-        let recordingChunks = [];
+        let audioChunks = [];
         let isRecording = false;
 
-        // WebRTC variables
-        let peer = null;
-        let localStream = null;
-        let currentCallId = null;
-        let callTimerInterval = null;
-        let isVideoCall = false;
+        function showToast(msg) {
+            const toast = document.createElement('div');
+            toast.className = 'global-toast';
+            toast.textContent = msg;
+            document.body.appendChild(toast);
+            requestAnimationFrame(() => toast.style.opacity = '1');
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 2000);
+        }
 
-        function showToast(msg) { toast(msg); }
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;' })[m]);
+        }
 
-        // عرض الرسائل
-        function appendMessage(msg, scroll = true) {
+        function appendMessage(msg, isMe, scroll = true) {
             const area = document.getElementById('messagesArea');
-            const isMe = msg.sender_id === currentUser.id;
+            if (area.children.length === 1 && area.children[0].innerText.includes('جاري تحميل المحادثة')) {
+                area.innerHTML = '';
+            }
             const div = document.createElement('div');
             div.className = `msg-row ${isMe ? 'own' : 'other'}`;
-            div.id = `msg-${msg.id}`;
-            let statusIcon = '';
-            if (isMe) {
-                if (msg.status === 'read') statusIcon = '<i class="fas fa-check-double" style="color:#34b7f1;"></i>';
-                else if (msg.status === 'sent') statusIcon = '<i class="fas fa-check-double"></i>';
-                else if (msg.status === 'sending') statusIcon = '<i class="fas fa-clock"></i>';
-                else if (msg.status === 'failed') statusIcon = '<i class="fas fa-exclamation-triangle" style="color:#ff4444;"></i>';
-            }
-            let mediaHtml = '';
+            let contentHtml = '';
             if (msg.type === 'image' && msg.media_url) {
-                mediaHtml = `<div><img src="${msg.media_url}" style="max-width:150px; border-radius:12px; margin-top:4px;"></div>`;
+                contentHtml = `<img src="${msg.media_url}" class="msg-image" onclick="event.stopPropagation(); document.getElementById('viewerImg').src='${msg.media_url}'; document.getElementById('imageViewer').classList.add('active');">`;
             } else if (msg.type === 'voice' && msg.media_url) {
-                mediaHtml = `<div><audio controls src="${msg.media_url}" style="width:150px; height:30px;"></audio></div>`;
+                contentHtml = `<audio controls src="${msg.media_url}"></audio>`;
+            } else {
+                contentHtml = `<div>${escapeHtml(msg.content || '')}</div>`;
             }
             div.innerHTML = `
                 <div class="msg-bubble">
-                    ${mediaHtml}
-                    <div>${esc(msg.content || '')}</div>
-                    <div class="msg-time">${fmtTime(msg.created_at)} ${statusIcon}</div>
+                    ${contentHtml}
+                    <div class="msg-time">${new Date(msg.created_at).toLocaleTimeString('ar-SA', { hour:'2-digit', minute:'2-digit' })}</div>
                 </div>
             `;
             area.appendChild(div);
             if (scroll) area.scrollTop = area.scrollHeight;
         }
 
-        // إرسال رسالة مع تخزين محلي أولاً
-        async function sendMessageOffline(text, mediaUrl, type = 'text') {
-            const tempId = 'temp_' + Date.now() + '_' + Math.random().toString(36);
+        // رفع صورة
+        async function uploadImage(file) {
+            const fileName = `${currentUser.id}/${Date.now()}_${file.name}`;
+            const { error } = await supabase.storage.from('ramz-images').upload(fileName, file);
+            if (error) throw error;
+            const { data: publicURL } = supabase.storage.from('ramz-images').getPublicUrl(fileName);
+            return publicURL.publicUrl;
+        }
+
+        // رفع صوت
+        async function uploadAudio(blob) {
+            const fileName = `voices/${currentUser.id}/${Date.now()}.webm`;
+            const { error } = await supabase.storage.from('ramz-images').upload(fileName, blob);
+            if (error) throw error;
+            const { data: publicURL } = supabase.storage.from('ramz-images').getPublicUrl(fileName);
+            return publicURL.publicUrl;
+        }
+
+        async function sendMessage(text, mediaUrl = null, type = 'text') {
             const newMsg = {
-                id: tempId,
                 sender_id: currentUser.id,
                 receiver_id: chatId,
                 content: text || '',
                 type: type,
-                media_url: mediaUrl || '',
-                created_at: new Date().toISOString(),
-                status: 'sending'
+                media_url: mediaUrl || null,
+                status: 'sent',
+                created_at: new Date().toISOString()
             };
-            await insertMessage(newMsg);
-            appendMessage(newMsg, true);
-            try {
-                const sent = await sendMsgCloud(chatId, { text, type, img: mediaUrl });
-                await updateMessageLocalStatus(tempId, 'sent', sent.id);
-                const el = document.getElementById(`msg-${tempId}`);
-                if (el) el.id = `msg-${sent.id}`;
-            } catch (err) {
-                await updateMessageLocalStatus(tempId, 'failed');
-                showToast('⚠️ فشل الإرسال، سيتم إعادة المحاولة لاحقاً');
+            appendMessage({ content: text, type, media_url: mediaUrl, created_at: newMsg.created_at }, true, true);
+            const { error } = await supabase.from('messages').insert(newMsg);
+            if (error) showToast('⚠️ فشل الإرسال');
+        }
+
+        // تحميل بيانات المستخدم الآخر
+        async function loadChatUser() {
+            const { data } = await supabase.from('users').select('*').eq('id', chatId).single();
+            if (data) {
+                chatUser = data;
+                document.getElementById('chatName').innerText = chatUser.name;
+                document.getElementById('chatAvatar').innerText = chatUser.avatar || chatUser.name.charAt(0);
+                document.getElementById('chatStatus').innerHTML = chatUser.is_online ? '🟢 متصل' : '🔴 غير متصل';
             }
         }
 
+        // تحميل جميع الرسائل السابقة
         async function loadMessages() {
-            const msgs = getMessages(currentUser.id, chatId);
-            const area = document.getElementById('messagesArea');
-            area.innerHTML = '';
-            let lastDate = '';
-            msgs.forEach(m => {
-                const md = new Date(m.created_at).toDateString();
-                if (md !== lastDate) {
-                    lastDate = md;
-                    const divDate = document.createElement('div');
-                    divDate.className = 'msg-row other';
-                    divDate.innerHTML = `<div class="msg-bubble" style="background:transparent; text-align:center; color:#999; font-size:11px;">${fmtDate(m.created_at)}</div>`;
-                    area.appendChild(divDate);
-                }
-                appendMessage(m, false);
-            });
-            area.scrollTop = area.scrollHeight;
-        }
-
-        async function syncFromCloud() {
-            const { data: cloudMsgs } = await supabase
+            const { data } = await supabase
                 .from('messages')
                 .select('*')
                 .or(`and(sender_id.eq.${currentUser.id},receiver_id.eq.${chatId}),and(sender_id.eq.${chatId},receiver_id.eq.${currentUser.id})`)
-                .order('created_at');
-            if (!cloudMsgs) return;
-            for (const msg of cloudMsgs) {
-                const exists = getMessages(currentUser.id, chatId).some(m => m.id === msg.id);
-                if (!exists) {
-                    await insertMessage(msg);
-                    appendMessage(msg, true);
-                }
+                .order('created_at', { ascending: true });
+            
+            const area = document.getElementById('messagesArea');
+            area.innerHTML = '';
+            if (!data || data.length === 0) {
+                area.innerHTML = '<div class="msg-row other"><div class="msg-bubble">✨ لا توجد رسائل بعد، اكتب أول رسالة</div></div>';
+                return;
             }
-            // تحديث القراءة
-            await supabase.from('messages').update({ status: 'read' }).eq('sender_id', chatId).eq('receiver_id', currentUser.id);
+            data.forEach(msg => appendMessage(msg, msg.sender_id === currentUser.id, false));
+            area.scrollTop = area.scrollHeight;
+            
+            const unreadIds = data.filter(m => m.sender_id === chatId && m.status !== 'read').map(m => m.id);
+            if (unreadIds.length) await supabase.from('messages').update({ status: 'read' }).in('id', unreadIds);
         }
 
-        // المكالمات
-        async function startCall(isVideo) {
-            if (currentCallId) return;
-            isVideoCall = isVideo;
+        // رفع الصورة ومعالجتها
+        async function handleImageUpload(file) {
+            if (!file || isUploading) return;
+            isUploading = true;
+            showToast('📤 جاري رفع الصورة...');
             try {
-                localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: isVideo });
-                if (isVideo) document.getElementById('localVideo').style.display = 'block';
-                const { data: call } = await supabase.from('calls').insert({
-                    caller_id: currentUser.id, callee_id: chatId, status: 'ringing', type: isVideo ? 'video' : 'audio'
-                }).select().single();
-                currentCallId = call.id;
-                document.getElementById('ongoingCallerName').innerText = chatUser?.name || '...';
-                document.getElementById('ongoingCallerAvatar').innerText = chatUser?.avatar || '?';
-                document.getElementById('ongoingCallModal').classList.add('show');
-                let start = Date.now();
-                callTimerInterval = setInterval(() => {
-                    let s = Math.floor((Date.now() - start) / 1000);
-                    document.getElementById('callTimer').innerText = `${Math.floor(s/60)}:${(s%60).toString().padStart(2,'0')}`;
-                }, 1000);
-                peer = new SimplePeer({ initiator: true, stream: localStream });
-                peer.on('signal', async (signal) => {
-                    await supabase.from('calls_signals').insert({ call_id: currentCallId, sender_id: currentUser.id, signal_data: JSON.stringify(signal) });
-                });
-                peer.on('stream', (stream) => { if (isVideo) document.getElementById('remoteVideo').srcObject = stream; });
-                peer.on('error', endCall);
-                peer.on('close', endCall);
-            } catch(e) { showToast('⚠️ لا يمكن الوصول للكاميرا/الميكروفون'); }
-        }
-        async function answerCall(callId) {
-            const { data: call } = await supabase.from('calls').select('*').eq('id', callId).single();
-            if (!call) return;
-            isVideoCall = call.type === 'video';
-            try {
-                localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: isVideoCall });
-                if (isVideoCall) document.getElementById('localVideo').style.display = 'block';
-                await supabase.from('calls').update({ status: 'ongoing', answered_at: new Date() }).eq('id', callId);
-                document.getElementById('incomingCallModal').classList.remove('show');
-                document.getElementById('ongoingCallerName').innerText = chatUser?.name || '...';
-                document.getElementById('ongoingCallerAvatar').innerText = chatUser?.avatar || '?';
-                document.getElementById('ongoingCallModal').classList.add('show');
-                let start = Date.now();
-                callTimerInterval = setInterval(() => {
-                    let s = Math.floor((Date.now() - start) / 1000);
-                    document.getElementById('callTimer').innerText = `${Math.floor(s/60)}:${(s%60).toString().padStart(2,'0')}`;
-                }, 1000);
-                peer = new SimplePeer({ initiator: false, stream: localStream });
-                peer.on('signal', async (signal) => {
-                    await supabase.from('calls_signals').insert({ call_id: callId, sender_id: currentUser.id, signal_data: JSON.stringify(signal) });
-                });
-                peer.on('stream', (stream) => { if (isVideoCall) document.getElementById('remoteVideo').srcObject = stream; });
-                peer.on('error', endCall);
-                peer.on('close', endCall);
-                const { data: signals } = await supabase.from('calls_signals').select('*').eq('call_id', callId).order('created_at');
-                signals.forEach(sig => { if (sig.sender_id !== currentUser.id) try { peer.signal(JSON.parse(sig.signal_data)); } catch(e) {} });
-            } catch(e) { showToast('⚠️ فشل الرد'); }
-        }
-        async function endCall() {
-            if (!currentCallId) return;
-            await supabase.from('calls').update({ status: 'completed', ended_at: new Date() }).eq('id', currentCallId);
-            document.getElementById('ongoingCallModal').classList.remove('show');
-            if (callTimerInterval) clearInterval(callTimerInterval);
-            if (localStream) localStream.getTracks().forEach(t => t.stop());
-            if (peer) peer.destroy();
-            localStream = null; peer = null; currentCallId = null;
-            document.getElementById('localVideo').style.display = 'none';
-            document.getElementById('remoteVideo').style.display = 'none';
-        }
-        function subscribeToCalls() {
-            supabase.channel(`calls-${currentUser.id}`)
-                .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'calls', filter: `callee_id=eq.${currentUser.id}` }, async (payload) => {
-                    if (payload.new.status === 'ringing' && !currentCallId) {
-                        currentCallId = payload.new.id;
-                        const { data: caller } = await supabase.from('users').select('name, avatar').eq('id', payload.new.caller_id).single();
-                        document.getElementById('callerName').innerText = caller?.name || 'مستخدم';
-                        document.getElementById('callerAvatar').innerText = caller?.avatar || '?';
-                        document.getElementById('incomingCallModal').classList.add('show');
-                    }
-                })
-                .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'calls_signals' }, async (payload) => {
-                    if (payload.new.call_id === currentCallId && payload.new.sender_id !== currentUser.id && peer) {
-                        try { peer.signal(JSON.parse(payload.new.signal_data)); } catch(e) {}
-                    }
-                })
-                .subscribe();
+                const imageUrl = await uploadImage(file);
+                await sendMessage('', imageUrl, 'image');
+                showToast('✅ تم إرسال الصورة');
+            } catch (err) {
+                showToast('❌ فشل رفع الصورة');
+            } finally {
+                isUploading = false;
+            }
         }
 
-        // ========== أحداث الصفحة ==========
-        document.getElementById('backBtn').onclick = () => { window.location.href = 'chats.html'; };
-        document.getElementById('sendBtn').onclick = async () => {
-            const text = document.getElementById('msgInput').value.trim();
-            if (!text && !pendingImg) return;
-            await sendMessageOffline(text, pendingImg || '', pendingImg ? 'image' : 'text');
-            document.getElementById('msgInput').value = '';
-            pendingImg = null;
-        };
-        document.getElementById('msgInput').addEventListener('keypress', (e) => { if (e.key === 'Enter') document.getElementById('sendBtn').click(); });
-        document.getElementById('attachBtn').onclick = () => document.getElementById('fileInput').click();
-        document.getElementById('fileInput').onchange = async (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                showToast('رفع الصورة...');
-                const url = await uploadImage(file);
-                pendingImg = url;
-                showToast('الصورة جاهزة للإرسال');
-            }
-            e.target.value = '';
-        };
-        // التسجيل الصوتي
-        const micBtn = document.getElementById('micBtn');
-        micBtn.addEventListener('mousedown', async () => {
+        // بدء التسجيل الصوتي
+        async function startRecording() {
             if (isRecording) return;
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            isRecording = true;
-            micBtn.style.background = '#ff4d4d';
-            mediaRecorder = new MediaRecorder(stream);
-            recordingChunks = [];
-            mediaRecorder.ondataavailable = e => recordingChunks.push(e.data);
-            mediaRecorder.onstop = async () => {
-                const blob = new Blob(recordingChunks, { type: 'audio/webm' });
-                const fileName = `voice_${Date.now()}.webm`;
-                const { error } = await supabase.storage.from('ramz-images').upload(`voices/${currentUser.id}/${fileName}`, blob);
-                if (error) showToast('❌ فشل رفع التسجيل');
-                else {
-                    const { data: publicURL } = supabase.storage.from('ramz-images').getPublicUrl(`voices/${currentUser.id}/${fileName}`);
-                    await sendMessageOffline('🎤 رسالة صوتية', publicURL.publicUrl, 'voice');
-                    showToast('✅ تم إرسال التسجيل');
-                }
-                stream.getTracks().forEach(t => t.stop());
-                isRecording = false;
-                micBtn.style.background = '';
-            };
-            mediaRecorder.start();
-            setTimeout(() => { if (mediaRecorder && mediaRecorder.state === 'recording') mediaRecorder.stop(); }, 15000);
-        });
-        micBtn.addEventListener('mouseup', () => { if (mediaRecorder && mediaRecorder.state === 'recording') mediaRecorder.stop(); });
-        micBtn.addEventListener('mouseleave', () => { if (mediaRecorder && mediaRecorder.state === 'recording') mediaRecorder.stop(); });
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+                mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+                mediaRecorder.onstop = async () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    showToast('📤 جاري رفع التسجيل...');
+                    try {
+                        const audioUrl = await uploadAudio(audioBlob);
+                        await sendMessage('🎤 رسالة صوتية', audioUrl, 'voice');
+                        showToast('✅ تم إرسال التسجيل');
+                    } catch (err) {
+                        showToast('❌ فشل رفع التسجيل');
+                    }
+                    stream.getTracks().forEach(t => t.stop());
+                    isRecording = false;
+                    document.getElementById('micBtn').classList.remove('recording');
+                };
+                mediaRecorder.start();
+                isRecording = true;
+                document.getElementById('micBtn').classList.add('recording');
+                showToast('🎙️ سجل... ارفع إصبعك للإرسال');
+            } catch (err) {
+                showToast('⚠️ لا يمكن الوصول للميكروفون');
+            }
+        }
 
-        document.getElementById('voiceCallBtn').onclick = () => startCall(false);
-        document.getElementById('videoCallBtn').onclick = () => startCall(true);
-        document.getElementById('answerCallBtn').onclick = () => { if (currentCallId) answerCall(currentCallId); };
-        document.getElementById('rejectCallBtn').onclick = async () => { if (currentCallId) await supabase.from('calls').update({ status: 'missed' }).eq('id', currentCallId); document.getElementById('incomingCallModal').classList.remove('show'); currentCallId = null; };
-        document.getElementById('endCallBtn').onclick = endCall;
-        document.getElementById('toggleVideoBtn').onclick = () => { if (localStream) { const track = localStream.getVideoTracks()[0]; if (track) track.enabled = !track.enabled; } };
-
-        // تحميل بيانات المستخدم الآخر
-        const { data: userData } = await supabase.from('users').select('*').eq('id', chatId).single();
-        chatUser = userData;
-        document.getElementById('chatName').innerText = chatUser.name;
-        document.getElementById('chatAvatar').innerText = chatUser.avatar || chatUser.name.charAt(0);
-        document.getElementById('chatStatus').innerHTML = chatUser.is_online ? '🟢 متصل' : '🔴 غير متصل';
-
-        await loadMessages();
-        await syncFromCloud();
+        function stopRecording() {
+            if (mediaRecorder && isRecording && mediaRecorder.state === 'recording') {
+                mediaRecorder.stop();
+            }
+        }
 
         // Realtime للرسائل الجديدة
-        const channel = supabase.channel(`msg-${chatId}`)
-            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: `receiver_id=eq.${currentUser.id}` }, async (payload) => {
+        supabase
+            .channel(`chat-${chatId}`)
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: `receiver_id=eq.${currentUser.id}` }, (payload) => {
                 if (payload.new.sender_id === chatId) {
-                    await insertMessage(payload.new);
-                    appendMessage(payload.new, true);
-                    await supabase.from('messages').update({ status: 'read' }).eq('id', payload.new.id);
+                    appendMessage(payload.new, false, true);
+                    supabase.from('messages').update({ status: 'read' }).eq('id', payload.new.id);
                 }
             })
             .subscribe();
 
-        // Typing
-        onTypingEvent(chatId, (typing) => {
-            document.getElementById('chatStatus').innerHTML = typing ? '✍️ يكتب...' : (chatUser.is_online ? '🟢 متصل' : '🔴 غير متصل');
-        });
-        document.getElementById('msgInput').addEventListener('input', () => {
-            sendTypingEvent(chatId, true);
-            clearTimeout(window.typingTimeout);
-            window.typingTimeout = setTimeout(() => sendTypingEvent(chatId, false), 2000);
-        });
+        // أحداث الصفحة
+        document.getElementById('backBtn').onclick = () => window.location.href = 'chats.html';
+        document.getElementById('sendBtn').onclick = async () => {
+            const text = document.getElementById('msgInput').value.trim();
+            if (!text) return;
+            document.getElementById('msgInput').value = '';
+            await sendMessage(text);
+        };
+        document.getElementById('msgInput').addEventListener('keypress', e => { if (e.key === 'Enter') document.getElementById('sendBtn').click(); });
+        document.getElementById('attachBtn').onclick = () => document.getElementById('fileInput').click();
+        document.getElementById('fileInput').onchange = e => { if (e.target.files[0]) handleImageUpload(e.target.files[0]); e.target.value = ''; };
+        
+        // أحداث زر الميكروفون (اضغط مع الاستمرار)
+        const micBtn = document.getElementById('micBtn');
+        micBtn.addEventListener('mousedown', startRecording);
+        micBtn.addEventListener('mouseup', stopRecording);
+        micBtn.addEventListener('mouseleave', stopRecording);
+        micBtn.addEventListener('touchstart', (e) => { e.preventDefault(); startRecording(); });
+        micBtn.addEventListener('touchend', stopRecording);
 
-        subscribeToCalls();
+        await loadChatUser();
+        await loadMessages();
+
         window.addEventListener('beforeunload', () => {
             supabase.from('users').update({ is_online: false, last_seen: new Date() }).eq('id', currentUser.id);
         });
